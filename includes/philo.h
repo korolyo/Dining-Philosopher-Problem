@@ -20,12 +20,13 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <limits.h>
+# include <unistd.h>
 
 //From EXAMPLE. mb DELETE after...==========
 # define ERROR_CREATE_THREAD -11
 # define ERROR_JOIN_THREAD -12
 # define SUCCESS 0
-# define BAD_MESSAGE "I'm dead"
+# define BAD_MESSAGE -1
 //===========================================
 
 // colored output
@@ -52,5 +53,6 @@ struct	s_philo
 void	init_data(t_philo *philo);
 void	check_argv(t_philo *philo, int argc, char **argv);
 int64_t	ft_atol(const char *nptr);
+void	threads(t_philo *philo);
 
 #endif
