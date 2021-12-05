@@ -29,7 +29,7 @@
 # define BAD_MESSAGE -1
 //===========================================
 
-// colored output
+// ANSI colored output
 # define ANSI_COLOR_R		"\x1b[31m"
 # define ANSI_COLOR_G		"\x1b[32m"
 # define ANSI_COLOR_Y		"\x1b[33m"
@@ -37,6 +37,10 @@
 # define ANSI_COLOR_MAGENTA	"\x1b[35m"
 # define ANSI_COLOR_CYAN		"\x1b[36m"
 # define ANSI_COLOR_RESET	"\x1b[0m"
+
+// GLOBAL FOR MUTEX
+pthread_mutex_t left_fork;
+pthread_mutex_t right_fork;
 
 typedef struct s_env	t_env;
 typedef struct s_philo	t_philo;
