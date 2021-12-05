@@ -6,7 +6,8 @@ SOURCES_LIST	= 	main.c\
 					check_argv.c\
 
 CC		= gcc
-CFLAGS	=	-Werror -Wall -Wextra
+CFLAGS	=	-Werror -Wall -Wextra -g
+LIBS	= 	-pthread
 
 INCLUDES = -I$(HEADERS_DIR)
 
@@ -23,7 +24,7 @@ OBJECTS	=	$(patsubst %.c, %.o, $(SOURCES_LIST))
 all	: 	$(NAME)
 
 $(NAME): $(OBJECTS)
-		@$(CC) $(CFLAGS) $(INCLUDES) $(OBJECTS) -o $(NAME)
+		$(CC) $(CFLAGS) $(LIBS) $(INCLUDES) $(OBJECTS) -o $(NAME)
 
 %.o : %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $(INCLUDES) $< -o $@

@@ -1,47 +1,63 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: acollin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/05 16:08:10 by acollin           #+#    #+#             */
+/*   Updated: 2021/12/05 16:08:22 by acollin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	*philo_alive(void *args)
 {
-	t_philo	*philo;
+	t_env	*env;
 
-	philo = (t_philo *)args;
-	printf("Time to eat: %lld\n", philo->time_to_eat);
-	if (philo->time_to_die < philo->time_to_eat + philo->time_to_sleep)
-		printf("I'm DEAD!\n");
-	return (SUCCESS);
+	env = (t_env *)args;
+	printf(ANSI_COLOR_CYAN "IM I ALIVE? BUT IM HUNGRY!!\n CAN I HAVE SOME"
+		" FORKS, SIR?\n" ANSI_COLOR_CYAN);
+//	pthread_mutex_lock(&left_fork);
+//	pthread_mutex_lock(&right_fork);
+	printf("%lld %lld has taken a fork\n", env->time_to_sleep, env->count);
+	usleep(env->time_to_eat);
+//	pthread_mutex_unlock(&left_fork);
+//	pthread_mutex_unlock(&right_fork);
+	printf(ANSI_COLOR_Y "%lld %lld is sleeping\n" ANSI_COLOR_Y,
+		env->time_to_sleep, env->count);
+	usleep(env->time_to_sleep);
+	printf(ANSI_COLOR_B "%lld %lld is thinking\n"	ANSI_COLOR_B,
+		env->time_to_sleep, env->count);
+	return (NULL);
 }
 
-void threads(t_philo *philo)
+int	threads(t_env *env)
 {
-	pthread_t	threads[philo->number_of_philosophers];
-	int			i;
-	int 		status;
-	int 		status_addr;
+	pthread_t	*philo;
+	int64_t		i;
 
 	i = 0;
-	status = pthread_create(&threads, NULL, philo_alive, (void *)&philo);
-	if (status != 0)
+	philo = (pthread_t *)malloc((int)env->num_of_philos * sizeof(pthread_t));
+	if (NULL == philo)
+		return (0);
+	while (i < env->num_of_philos)
 	{
-		printf("main error: can't CREATE thread, status = %d\n", status);
-		exit(ERROR_CREATE_THREAD);
+		env->count = i;
+		pthread_create(&philo[i], NULL, &philo_alive, (void *) env);
+		i++;
 	}
-	usleep(300000);
-	printf(ANSI_COLOR_RED "Inside of a main"		ANSI_COLOR_RESET"\n");
-	status = pthread_join(threads, (void **)&status_addr);
-	if (status != SUCCESS)
-	{
-		printf("main error: cant JOIN thread, status %d\n", status);
-		exit(ERROR_JOIN_THREAD);
-	}
-	printf(ANSI_COLOR_MAGENTA"joined with address %d\n"ANSI_COLOR_MAGENTA, status_addr);
+	pthread_join(*philo, NULL);
+	return (0);
 }
 
 int	main(int argc, char **argv)
 {
-	t_philo		philo;
+	t_env	env;
 
-	init_data(&philo);
-	check_argv(&philo, argc, argv);
-	threads(&philo);
+	check_argv(argc, argv);
+	init_data(&env, argc, argv);
+	threads(&env);
 	return (0);
 }
