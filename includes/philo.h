@@ -22,6 +22,8 @@
 # include <limits.h>
 # include <unistd.h>
 
+# define PHILO_MAX 200
+
 //From EXAMPLE. mb DELETE after...==========
 # define ERROR_CREATE_THREAD -11
 # define ERROR_JOIN_THREAD -12
