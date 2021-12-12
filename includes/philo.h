@@ -40,12 +40,9 @@
 # define ANSI_COLOR_CYAN		"\x1b[36m"
 # define ANSI_COLOR_RESET	"\x1b[0m"
 
-// GLOBAL FOR MUTEX
-pthread_mutex_t left_fork;
-pthread_mutex_t right_fork;
-
 typedef struct s_env	t_env;
 typedef struct s_philo	t_philo;
+typedef pthread_mutex_t	mutex;
 
 // PARSED ARGS
 struct	s_env
@@ -56,13 +53,7 @@ struct	s_env
 	int64_t	time_to_sleep;
 	int64_t	num_of_meals;
 	int64_t	count;
-};
-
-// PHILOSOPHERs
-struct	s_philo
-{
-	int	left_hand;
-	int	right_hand;
+	mutex 	fork[PHILO_MAX];
 };
 
 void	check_argv(int argc, char **argv);

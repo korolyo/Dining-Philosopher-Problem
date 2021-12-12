@@ -27,5 +27,6 @@ int64_t	init_data(t_env *env, int argc, char **argv)
 	env->num_of_meals = 0;
 	if (argc > 5)
 		env->num_of_meals = ft_atol(argv[5]);
+//	env->fork = NULL;
 	return (env->num_of_philos);
 }
