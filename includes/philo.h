@@ -24,6 +24,11 @@
 
 # define PHILO_MAX 200
 
+// PHILOS STATES
+# define HUNGRY		1
+# define EATING		2
+# define THINKING	3
+
 //From EXAMPLE. mb DELETE after...==========
 # define ERROR_CREATE_THREAD -11
 # define ERROR_JOIN_THREAD -12
@@ -32,34 +37,37 @@
 //===========================================
 
 // ANSI colored output
-# define ANSI_COLOR_R		"\x1b[31m"
-# define ANSI_COLOR_G		"\x1b[32m"
-# define ANSI_COLOR_Y		"\x1b[33m"
-# define ANSI_COLOR_B		"\x1b[34m"
-# define ANSI_COLOR_MAGENTA	"\x1b[35m"
-# define ANSI_COLOR_CYAN		"\x1b[36m"
-# define ANSI_COLOR_RESET	"\x1b[0m"
+# define FORK		"\x1b[33m has taken a fork\x1b[33m"
+# define EAT			"\x1b[35m is eating\x1b[35m"
+# define SLEEP		"\x1b[34m is sleeping\x1b[34m"
+# define THINK		"\x1b[32m is thinking\x1b[32m"
+# define DEATH		"\x1b[31m died\x1b[31m"
+# define ERROR		"\x1b[31m Error\x1b[31m"
 
 typedef struct s_env	t_env;
 typedef struct s_philo	t_philo;
 typedef pthread_mutex_t	mutex;
+typedef	struct	timeval	t_time;
 
 // PARSED ARGS
 struct	s_env
 {
 	int64_t	num_of_philos;
+	int64_t timestamp;
 	int64_t	time_to_die;
 	int64_t	time_to_eat;
 	int64_t	time_to_sleep;
 	int64_t	num_of_meals;
 	int64_t	phil_n;
 	mutex 	fork[PHILO_MAX];
+	int64_t state[PHILO_MAX];
 };
 
 void	check_argv(int argc, char **argv);
 int64_t	init_data(t_env *env, int argc, char **argv);
 int		threads(t_env *env);
 void	*philo_alive(void *args);
+int64_t	gettime_ms();
 
 // SOME UTILS
 int64_t	ft_atol(const char *nptr);

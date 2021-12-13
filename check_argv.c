@@ -15,16 +15,25 @@
 void	check_argv(int argc, char **argv)
 {
 	if (argc < 5 || ft_atol(argv[1]) <= 0 || ft_atol(argv[1]) > INT_MAX)
-		printf(ANSI_COLOR_R "Error" ANSI_COLOR_R"\n");
+		printf(ERROR);
 }
 
 int64_t	init_data(t_env *env, int argc, char **argv)
 {
+	int	i;
+
+	i = 0;
 	env->num_of_philos = ft_atol(argv[1]);
 	env->time_to_die = ft_atol(argv[2]);
 	env->time_to_eat = ft_atol(argv[3]);
 	env->time_to_sleep = ft_atol(argv[4]);
 	env->num_of_meals = 0;
+	env->timestamp = 0;
+	while (i < PHILO_MAX)
+	{
+		env->state[i] = HUNGRY;
+		i++;
+	}
 	if (argc > 5)
 		env->num_of_meals = ft_atol(argv[5]);
 	return (env->num_of_philos);
