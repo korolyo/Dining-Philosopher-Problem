@@ -52,7 +52,7 @@ struct	s_env
 	int64_t	time_to_eat;
 	int64_t	time_to_sleep;
 	int64_t	num_of_meals;
-	int64_t	count;
+	int64_t	phil_n;
 	mutex 	fork[PHILO_MAX];
 };
 
