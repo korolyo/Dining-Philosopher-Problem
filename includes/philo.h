@@ -49,18 +49,27 @@ typedef struct s_philo	t_philo;
 typedef pthread_mutex_t	mutex;
 typedef	struct	timeval	t_time;
 
+struct		s_philo
+{
+	int64_t	id;
+	int64_t timestamp;
+	int64_t state;
+	int64_t	num_of_philos;
+	mutex 	*left_fork;
+	mutex 	*right_fork;
+	t_env	*env;
+};
+
 // PARSED ARGS
-struct	s_env
+struct		s_env
 {
 	int64_t	num_of_philos;
-	int64_t timestamp;
 	int64_t	time_to_die;
 	int64_t	time_to_eat;
 	int64_t	time_to_sleep;
 	int64_t	num_of_meals;
-	int64_t	phil_n;
 	mutex 	fork[PHILO_MAX];
-	int64_t state[PHILO_MAX];
+	t_philo *philosopher;
 };
 
 void	check_argv(int argc, char **argv);

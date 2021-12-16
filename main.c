@@ -22,45 +22,37 @@ int64_t	gettime_ms()
 	return (time_in_mill);
 }
 
-void	test(t_env *env, int64_t philo_number)
+void	test(t_philo *philo)
 {
-	if (philo_number == env->num_of_philos && env->state[philo_number] == HUNGRY
-		&& env->state[1] != EATING && env->state[philo_number - 1] != EATING)
+	if (philo->id == philo->env->num_of_philos && philo->state ==
+		HUNGRY && philo->state[1] != EATING && philo->state !=
+		EATING)
 		env->state[philo_number] = EATING;
 	else if (env->state[philo_number] == HUNGRY && env->state[philo_number + 1]
 		!= EATING && env->state[philo_number - 1] != EATING)
 		env->state[philo_number] = EATING;
 }
 
-void	put_forks(t_env *env, int64_t philo_number)
+void	put_forks(t_philo *philo)
 {
-//	mutex	put_forks;
-//
-//	pthread_mutex_init(&put_forks, NULL);
-//	pthread_mutex_lock(&put_forks);
-	env->state[philo_number] = THINKING;
-	test(env, philo_number - 1);
-	test(env, philo_number + 1);
-//	pthread_mutex_unlock(&put_forks);
-	pthread_mutex_unlock(&((env->fork)[philo_number]));
+	philo->state = THINKING;
+	test(philo);
+	test(philo);
+	pthread_mutex_unlock(&(philo->left_fork);
 	if (philo_number == env->num_of_philos)
-		pthread_mutex_unlock(&((env->fork)[1]));
+		pthread_mutex_unlock(&((philo->right)[1]));
 	else
-		pthread_mutex_unlock(&((env->fork)[philo_number + 1]));
+		pthread_mutex_unlock(&((philo->right)[philo->id + 1]));
 }
 
-void	take_forks(t_env *env, int64_t philo_number)
+void	take_forks(t_philo *philo)
 {
-//	mutex	forks;
-//
-//	pthread_mutex_init(&forks, NULL);
-//	pthread_mutex_lock(&forks);
-	env->state[philo_number] = HUNGRY;
-	test(env, philo_number);
-//	pthread_mutex_unlock(&forks);
-	pthread_mutex_lock(&((env->fork)[philo_number]));
-	printf("%lld %lld" FORK "\n", env->timestamp, philo_number);
-	if (philo_number == env->num_of_philos)
+	philo->state = HUNGRY;
+	test(philo);
+	pthread_mutex_lock(&(philo->left_fork));
+//	pthread_mutex_lock(&(philo->right_fork));
+	printf("%lld %lld" FORK "\n", philo->timestamp, philo->id);
+	if (philo->id == philo->env->num_of_philos)
 		pthread_mutex_lock(&((env->fork)[1]));
 	else
 		pthread_mutex_lock(&((env->fork)[philo_number + 1]));
@@ -69,28 +61,24 @@ void	take_forks(t_env *env, int64_t philo_number)
 
 void	*philo_alive(void *args)
 {
-	t_env	*env;
+	t_philo	*philo;
 
-	env = (t_env *)args;
+	philo = (t_philo*)args;
 	while (21)
 	{
-		printf("%lld\n", env->phil_n);
-		printf("%lld %lld" THINK "\n", env->timestamp, env->phil_n);
-		take_forks(env, env->phil_n);
-		if (env->state[env->phil_n] == EATING)
+		printf("%lld\n", philo->id);
+		printf("%lld %lld" THINK "\n", philo->timestamp, philo->id);
+		take_forks(philo);
+		if (philo->state == EATING)
 		{
-			env->timestamp = env->timestamp + env->time_to_eat;
-			printf("%lld %lld" EAT "\n", env->timestamp, env->phil_n);
+			philo->timestamp = philo->timestamp + philo->env->time_to_eat;
+			printf("%lld %lld" EAT "\n", env->timestamp, philo->id);
 			usleep(env->time_to_eat);
 		}
 		put_forks(env, env->phil_n);
 		env->timestamp = env->timestamp + env->time_to_eat;
-		printf("%lld %lld" SLEEP "\n", env->timestamp, env->phil_n);
-		usleep(env->time_to_sleep);
-		if (env->phil_n == env->num_of_philos)
-			env->phil_n = 1;
-		else
-			env->phil_n++;
+		printf("%lld %lld" SLEEP "\n", philo->timestamp, env->phil_n);
+		usleep(philo->env->time_to_sleep);
 		usleep(100000);
 	}
 	return (NULL);
@@ -100,7 +88,6 @@ int	threads(t_env *env)
 {
 	pthread_t	philo[PHILO_MAX];
 	int64_t		i;
-//	int64_t		time_in_mill;
 
 	i = 0;
 	while (i < env->num_of_philos)
@@ -111,24 +98,24 @@ int	threads(t_env *env)
 	i = 0;
 	while (i < env->num_of_philos)
 	{
-		printf("%lld\n", env->phil_n);
-		env->phil_n = i + 1;
-		pthread_create(&philo[i], NULL, &philo_alive, (void *) env);
+		env->philosopher[i]->id = i + 1;
+		pthread_create(&philo[i], NULL, &philo_alive, (void *)
+		env->philosopher[i]);
 		i++;
 	}
-	while (21)
-	{
-		if (env->timestamp > env->time_to_die)
-		{
-			printf("%lld %lld" DEATH "\n", env->timestamp, env->phil_n);
-			while (i < env->num_of_philos)
-			{
-				pthread_detach(philo[i]);
-				i++;
-			}
-			return(0);
-		}
-	}
+//	while (21)
+//	{
+//		if (env->timestamp > env->time_to_die)
+//		{
+//			printf("%lld %lld" DEATH "\n", env->timestamp, env->philosopher[i]);
+//			while (i < env->num_of_philos)
+//			{
+//				pthread_detach(philo[i]);
+//				i++;
+//			}
+//			return(0);
+//		}
+//	}
 	i = 0;
 	while (i < env->num_of_philos)
 	{
