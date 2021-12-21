@@ -72,11 +72,11 @@ struct		s_env
 	t_philo *philosopher;
 };
 
-void	check_argv(int argc, char **argv);
-int64_t	init_data(t_env *env, int argc, char **argv);
+int		check_argv(int argc, char **argv);
+int		init_data(t_env *env, int argc, char **argv);
 int		threads(t_env *env);
 void	*philo_alive(void *args);
-int64_t	gettime_ms();
+int		gettime_ms();
 
 // SOME UTILS
 int64_t	ft_atol(const char *nptr);
