@@ -20,7 +20,7 @@ void	*philo_alive(void *args)
 	while (21)
 	{
 		printf("start\n");
-		printf("%lld\n", philo->id);
+//		printf("%lld\n", philo->id);
 		printf("%lld %lld" THINK "\n", philo->timestamp, philo->id);
 		if (philo->state == EATING)
 		{

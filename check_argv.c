@@ -22,6 +22,18 @@ int	check_argv(int argc, char **argv)
 	return (1);
 }
 
+int	init_forks(t_env *env)
+{
+	while (i < env->num_of_philos)
+	{
+		(env->philosopher + i)->left_fork = (env->fork + i);
+		(env->philosopher + i)->right_fork = (env->fork + i + 1)
+			% env->num_of_philos;
+	}
+
+	return (0);
+}
+
 int	init_philo(t_env *env)
 {
 	int64_t	i;
@@ -53,6 +65,8 @@ int	init_data(t_env	*env, int argc, char **argv)
 	if (argc > 5)
 		env->num_of_meals = ft_atol(argv[5]);
 	if (init_philo(env) == -1)
+		return(-1);
+	if (init_forks(env) == -1)
 		return(-1);
 	return (0);
 }
