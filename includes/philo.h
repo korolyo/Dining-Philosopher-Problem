@@ -74,6 +74,7 @@ struct		s_env
 
 int		check_argv(int argc, char **argv);
 int		init_data(t_env *env, int argc, char **argv);
+int		init_philo(t_env *env);
 int		threads(t_env *env);
 void	*philo_alive(void *args);
 int		gettime_ms();

@@ -22,30 +22,37 @@ int	check_argv(int argc, char **argv)
 	return (1);
 }
 
-int	init_data(t_env *env, int argc, char **argv)
+int	init_philo(t_env *env)
 {
 	int64_t	i;
 	t_philo	*philo;
 
 	i = 0;
-	env->num_of_philos = ft_atol(argv[1]);
-	env->time_to_die = ft_atol(argv[2]);
-	env->time_to_eat = ft_atol(argv[3]);
-	env->time_to_sleep = ft_atol(argv[4]);
-	env->num_of_meals = 0;
 	philo = (t_philo *)malloc(sizeof(t_philo) * env->num_of_philos);
 	if (!philo)
 		return (-1);
 	while (i < env->num_of_philos)
 	{
-		(philo[i]).id = i + 1;
-		philo[i].timestamp = 0;
-		philo[i].state = HUNGRY;
+		(philo + i)->id = i + 1;
+		(philo + i)->timestamp = 0;
+		(philo + i)->state = HUNGRY;
+//		printf("philo[%lld] in init = %lld\n", i, (philo + i)->id);
 		i++;
-		printf("philo[%lld] in init = %lld\n", i, philo[i].id);
 	}
 	env->philosopher = philo;
+	return (0);
+}
+
+int	init_data(t_env	*env, int argc, char **argv)
+{
+	env->num_of_philos = ft_atol(argv[1]);
+	env->time_to_die = ft_atol(argv[2]);
+	env->time_to_eat = ft_atol(argv[3]);
+	env->time_to_sleep = ft_atol(argv[4]);
+	env->num_of_meals = 0;
 	if (argc > 5)
 		env->num_of_meals = ft_atol(argv[5]);
-	return (env->num_of_philos);
+	if (init_philo(env) == -1)
+		return(-1);
+	return (0);
 }
