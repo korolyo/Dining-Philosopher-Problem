@@ -22,15 +22,28 @@ int	check_argv(int argc, char **argv)
 	return (1);
 }
 
+int64_t	get_time_ms(void)
+{
+	struct timeval	tv;
+	int64_t			time_in_mill;
+
+	gettimeofday(&tv, NULL);
+	time_in_mill = (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000;
+	return (time_in_mill);
+}
+
 int	init_forks(t_env *env)
 {
+	int64_t	i;
+
+	i = 0;
 	while (i < env->num_of_philos)
 	{
-		(env->philosopher + i)->left_fork = (env->fork + i);
-		(env->philosopher + i)->right_fork = (env->fork + i + 1)
-			% env->num_of_philos;
+		(env->philosopher + i)->right_fork = &(env->fork[i]);
+		(env->philosopher + i)->left_fork =
+			&(env->fork[(i + 1) % env->num_of_philos]);
+		i++;
 	}
-
 	return (0);
 }
 
@@ -46,7 +59,7 @@ int	init_philo(t_env *env)
 	while (i < env->num_of_philos)
 	{
 		(philo + i)->id = i + 1;
-		(philo + i)->timestamp = 0;
+		(philo + i)->timestamp = get_time_ms();
 		(philo + i)->state = HUNGRY;
 //		printf("philo[%lld] in init = %lld\n", i, (philo + i)->id);
 		i++;
@@ -55,8 +68,11 @@ int	init_philo(t_env *env)
 	return (0);
 }
 
-int	init_data(t_env	*env, int argc, char **argv)
+void	init_env(t_env *env, int argc, char **argv)
 {
+	int64_t	i;
+
+	i = 0;
 	env->num_of_philos = ft_atol(argv[1]);
 	env->time_to_die = ft_atol(argv[2]);
 	env->time_to_eat = ft_atol(argv[3]);
@@ -64,6 +80,18 @@ int	init_data(t_env	*env, int argc, char **argv)
 	env->num_of_meals = 0;
 	if (argc > 5)
 		env->num_of_meals = ft_atol(argv[5]);
+//	while (i < env->num_of_philos)
+//	{
+//		printf("test\n");
+//		env->fork + i) = (mutex *)malloc(sizeof(mutex));
+////		(env->fork + i) = (mutex *)malloc(sizeof(mutex));
+//		i++;
+//	}
+}
+
+int	init_data(t_env	*env, int argc, char **argv)
+{
+	init_env(env, argc, argv);
 	if (init_philo(env) == -1)
 		return(-1);
 	if (init_forks(env) == -1)
