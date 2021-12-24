@@ -46,8 +46,14 @@
 
 typedef struct s_env	t_env;
 typedef struct s_philo	t_philo;
+typedef struct s_waiter	t_waiter;
 typedef pthread_mutex_t	mutex;
 typedef	struct	timeval	t_time;
+
+struct		s_waiter
+{
+	int64_t i;
+};
 
 struct		s_philo
 {
@@ -74,7 +80,11 @@ struct		s_env
 
 int		check_argv(int argc, char **argv);
 int		init_data(t_env *env, int argc, char **argv);
+void	init_env(t_env *env, int argc, char **argv);
 int		init_philo(t_env *env);
+int		init_forks(t_env *env);
+void	init_waiter(t_env *env);
+int64_t	get_time_ms(void);
 int		threads(t_env *env);
 void	*philo_alive(void *args);
 int		gettime_ms();
