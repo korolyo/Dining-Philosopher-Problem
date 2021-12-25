@@ -19,6 +19,7 @@ void	*monitor(void *args)
 	int64_t	time_ms;
 
 	env = (t_env *)args;
+	i = 0;
 	while (21)
 	{
 		i = 0;
@@ -26,8 +27,12 @@ void	*monitor(void *args)
 		{
 			time_ms = get_time_ms();
 			if (get_time_ms() - env->time_to_die > env->philosopher[i].timestamp)
+			{
+				env->philosopher[i].is_dead = 1;
 				printf("%lld %lld" DEATH "\n", env->philosopher[i].timestamp,
-					   env->philosopher[i].id);
+					env->philosopher[i].id);
+				return (NULL);
+			}
 			i++;
 		}
 	}
@@ -38,11 +43,11 @@ void	*philo_alive(void *args)
 	t_philo	*philo;
 
 	philo = (t_philo*)args;
-	while (21)
+	philo->timestamp = get_time_ms();
+	while (philo->is_dead == 0)
 	{
 //		printf("start\n");
 //		printf("%lld\n", philo->id);
-		philo->timestamp = get_time_ms();
 		printf("%lld %lld" THINK "\n", philo->timestamp, philo->id);
 		pthread_mutex_lock(philo->right_fork);
 		pthread_mutex_lock(philo->left_fork);
@@ -53,7 +58,7 @@ void	*philo_alive(void *args)
 			philo->timestamp = get_time_ms();
 			usleep(philo->env->time_to_eat);
 		}
-		philo->timestamp = get_time_ms();
+//		philo->timestamp = get_time_ms();
 		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
 		printf("%lld %lld" SLEEP "\n", philo->timestamp, philo->id);
@@ -65,7 +70,6 @@ void	*philo_alive(void *args)
 
 int	threads(t_env *env)
 {
-	pthread_t	philo[PHILO_MAX];
 	pthread_t	waiter;
 	int64_t		i;
 
@@ -81,18 +85,23 @@ int	threads(t_env *env)
 	{
 //		printf("test\n");
 //		printf("philo[%lld] in init = %lld\n", i, (env->philosopher + i)->id);
-		pthread_create(&philo[i], NULL, &philo_alive,
+		pthread_create(&(env->philo)[i], NULL, &philo_alive,
 			(void *)(env->philosopher + i));
 		i++;
 	}
 	pthread_create(&waiter, NULL, &monitor, (void *)env);
+	pthread_join(waiter, NULL);
+	while (i < env->num_of_philos)
+	{
+		pthread_detach((env->philo)[i]);
+		i++;
+	}
 	usleep(100000000);
 	i = 0;
 	while (i < env->num_of_philos)
 	{
-		pthread_join(philo[i], NULL);
+		pthread_join((env->philo)[i], NULL);
 		i++;
-//		printf("end\n");
 	}
 
 	i = 0;
