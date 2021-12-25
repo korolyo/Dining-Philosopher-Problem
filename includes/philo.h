@@ -61,6 +61,7 @@ struct		s_philo
 	int64_t timestamp;
 	int64_t state;
 	int64_t	num_of_philos;
+	int64_t is_dead;
 	mutex 	*left_fork;
 	mutex 	*right_fork;
 	t_env	*env;
@@ -69,13 +70,14 @@ struct		s_philo
 // PARSED ARGS
 struct		s_env
 {
-	int64_t	num_of_philos;
-	int64_t	time_to_die;
-	int64_t	time_to_eat;
-	int64_t	time_to_sleep;
-	int64_t	num_of_meals;
-	mutex 	fork[PHILO_MAX];
-	t_philo *philosopher;
+	int64_t		num_of_philos;
+	int64_t		time_to_die;
+	int64_t		time_to_eat;
+	int64_t		time_to_sleep;
+	int64_t		num_of_meals;
+	pthread_t	philo[PHILO_MAX];
+	mutex 		fork[PHILO_MAX];
+	t_philo 	*philosopher;
 };
 
 int		check_argv(int argc, char **argv);

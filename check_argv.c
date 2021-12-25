@@ -58,9 +58,11 @@ int	init_philo(t_env *env)
 		return (-1);
 	while (i < env->num_of_philos)
 	{
+		(philo + i)->is_dead = 0;
 		(philo + i)->id = i + 1;
 		(philo + i)->timestamp = get_time_ms();
 		(philo + i)->state = HUNGRY;
+		(philo + i)->env = env;
 //		printf("philo[%lld] in init = %lld\n", i, (philo + i)->id);
 		i++;
 	}
