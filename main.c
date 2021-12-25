@@ -16,17 +16,31 @@ void	*monitor(void *args)
 {
 	t_env	*env;
 	int		i;
+	int		k;
 	int64_t	time_ms;
 
 	env = (t_env *)args;
 	i = 0;
+	k = 0;
 	while (21)
 	{
 		i = 0;
 		while (i < env->num_of_philos)
 		{
+			if (env->philosopher[1].state == THINKING &&
+				env->philosopher[2].state == THINKING &&
+				env->philosopher[env->num_of_philos].state == THINKING)
+			{
+				while (k < env->num_of_philos)
+				{
+					if (k % 2 == 1)
+						env->philosopher[k].state = EATING;
+					k++;
+				}
+			}
 			time_ms = get_time_ms();
-			if (get_time_ms() - env->time_to_die > env->philosopher[i].timestamp)
+//			printf("time_ms in mon = %lld\n", time_ms);
+			if (time_ms - env->time_to_die > env->philosopher[i].timestamp)
 			{
 				env->philosopher[i].is_dead = 1;
 				printf("%lld %lld" DEATH "\n", env->philosopher[i].timestamp,
@@ -49,18 +63,19 @@ void	*philo_alive(void *args)
 //		printf("start\n");
 //		printf("%lld\n", philo->id);
 		printf("%lld %lld" THINK "\n", philo->timestamp, philo->id);
-		pthread_mutex_lock(philo->right_fork);
-		pthread_mutex_lock(philo->left_fork);
 		if (philo->state == EATING)
 		{
+			pthread_mutex_lock(philo->right_fork);
+			pthread_mutex_lock(philo->left_fork);
 			philo->timestamp = philo->timestamp + philo->env->time_to_eat;
 			printf("%lld %lld" EAT "\n", philo->timestamp, philo->id);
 			philo->timestamp = get_time_ms();
 			usleep(philo->env->time_to_eat);
+			philo->state = THINKING;
+			pthread_mutex_unlock(philo->right_fork);
+			pthread_mutex_unlock(philo->left_fork);
 		}
 //		philo->timestamp = get_time_ms();
-		pthread_mutex_unlock(philo->right_fork);
-		pthread_mutex_unlock(philo->left_fork);
 		printf("%lld %lld" SLEEP "\n", philo->timestamp, philo->id);
 		usleep(philo->env->time_to_sleep);
 //		usleep(100000);
@@ -91,26 +106,28 @@ int	threads(t_env *env)
 	}
 	pthread_create(&waiter, NULL, &monitor, (void *)env);
 	pthread_join(waiter, NULL);
-	while (i < env->num_of_philos)
-	{
-		pthread_detach((env->philo)[i]);
-		i++;
-	}
-	usleep(100000000);
-	i = 0;
-	while (i < env->num_of_philos)
-	{
-		pthread_join((env->philo)[i], NULL);
-		i++;
-	}
-
-	i = 0;
-	while (i < env->num_of_philos)
-	{
-		pthread_mutex_destroy(&((env->fork)[i]));
-		i++;
-	}
 	return (0);
+//	i = 0;
+//	while (i < env->num_of_philos)
+//	{
+//		pthread_detach((env->philo)[i]);
+//		i++;
+//	}
+//	usleep(100000000);
+//	i = 0;
+//	while (i < env->num_of_philos)
+//	{
+//		pthread_join((env->philo)[i], NULL);
+//		i++;
+//	}
+//
+//	i = 0;
+//	while (i < env->num_of_philos)
+//	{
+//		pthread_mutex_destroy(&((env->fork)[i]));
+//		i++;
+//	}
+//	return (0);
 }
 
 int	main(int argc, char **argv)
