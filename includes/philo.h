@@ -37,12 +37,12 @@
 //===========================================
 
 // ANSI colored output
-# define FORK		"\x1b[33m has taken a fork\x1b[33m"
-# define EAT			"\x1b[35m is eating\x1b[35m"
-# define SLEEP		"\x1b[34m is sleeping\x1b[34m"
-# define THINK		"\x1b[32m is thinking\x1b[32m"
-# define DEATH		"\x1b[31m died\x1b[31m"
-# define ERROR		"\x1b[31m Error\x1b[31m"
+# define FORK		"\x1b[33m has taken a fork\x1b[0m"
+# define EAT			"\x1b[35m is eating\x1b[0m"
+# define SLEEP		"\x1b[34m is sleeping\x1b[0m"
+# define THINK		"\x1b[32m is thinking\x1b[0m"
+# define DEATH		"\x1b[31m died\x1b[0m"
+# define ERROR		"\x1b[31m Error\x1b[0m"
 
 typedef struct s_env	t_env;
 typedef struct s_philo	t_philo;

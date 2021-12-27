@@ -27,17 +27,6 @@ void	*monitor(void *args)
 		i = 0;
 		while (i < env->num_of_philos)
 		{
-			if (env->philosopher[1].state == THINKING &&
-				env->philosopher[2].state == THINKING &&
-				env->philosopher[env->num_of_philos].state == THINKING)
-			{
-				while (k < env->num_of_philos)
-				{
-					if (k % 2 == 1)
-						env->philosopher[k].state = EATING;
-					k++;
-				}
-			}
 			time_ms = get_time_ms();
 //			printf("time_ms in mon = %lld\n", time_ms);
 			if (time_ms - env->time_to_die > env->philosopher[i].timestamp)
@@ -58,23 +47,32 @@ void	*philo_alive(void *args)
 
 	philo = (t_philo*)args;
 	philo->timestamp = get_time_ms();
+	if (philo->id % 2 == 1)
+	{
+		pthread_mutex_lock(philo->right_fork);
+		pthread_mutex_lock(philo->left_fork);
+		philo->timestamp = philo->timestamp + philo->env->time_to_eat;
+		printf("%lld %lld" EAT "\n", philo->timestamp, philo->id);
+		philo->timestamp = get_time_ms();
+		usleep(philo->env->time_to_eat);
+		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
+	}
+	else
+		usleep(10000);
 	while (philo->is_dead == 0)
 	{
 //		printf("start\n");
 //		printf("%lld\n", philo->id);
 		printf("%lld %lld" THINK "\n", philo->timestamp, philo->id);
-		if (philo->state == EATING)
-		{
-			pthread_mutex_lock(philo->right_fork);
-			pthread_mutex_lock(philo->left_fork);
-			philo->timestamp = philo->timestamp + philo->env->time_to_eat;
-			printf("%lld %lld" EAT "\n", philo->timestamp, philo->id);
-			philo->timestamp = get_time_ms();
-			usleep(philo->env->time_to_eat);
-			philo->state = THINKING;
-			pthread_mutex_unlock(philo->right_fork);
-			pthread_mutex_unlock(philo->left_fork);
-		}
+		pthread_mutex_lock(philo->right_fork);
+		pthread_mutex_lock(philo->left_fork);
+		philo->timestamp = philo->timestamp + philo->env->time_to_eat;
+		printf("%lld %lld" EAT "\n", philo->timestamp, philo->id);
+		philo->timestamp = get_time_ms();
+		usleep(philo->env->time_to_eat);
+		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
 //		philo->timestamp = get_time_ms();
 		printf("%lld %lld" SLEEP "\n", philo->timestamp, philo->id);
 		usleep(philo->env->time_to_sleep);
