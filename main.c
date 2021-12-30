@@ -80,13 +80,17 @@ void	*philo_alive(void *args)
 		time = get_time_ms();
 		printf("%lld %lld" EAT "\n", time, philo->id);
 		time = time + philo->env->time_to_eat;
-		usleep(philo->env->time_to_eat);
+		time = get_time_ms();
+//		printf("time before usleep: %lld\n", time);
+		usleep(philo->env->time_to_eat * 1000);
+		time = get_time_ms();
+//		printf("time after usleep:  %lld\n", time);
 		philo->timestamp = get_time_ms();
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
 //		philo->timestamp = get_time_ms();
 		printf("%lld %lld" SLEEP "\n", philo->timestamp, philo->id);
-		usleep(philo->env->time_to_sleep);
+		usleep(philo->env->time_to_sleep * 1000);
 		philo->timestamp = philo->timestamp + philo->env->time_to_sleep;
 //		usleep(100000);
 	}
@@ -113,7 +117,6 @@ int	threads(t_env *env)
 		pthread_create(&(env->philo)[i], NULL, &philo_alive,
 			(void *)(env->philosopher + i));
 		i++;
-//		usleep(1000000);
 	}
 	pthread_create(&waiter, NULL, &monitor, (void *)env);
 	pthread_join(waiter, NULL);
