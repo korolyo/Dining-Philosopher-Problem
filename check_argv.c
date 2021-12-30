@@ -72,23 +72,13 @@ int	init_philo(t_env *env)
 
 void	init_env(t_env *env, int argc, char **argv)
 {
-	int64_t	i;
-
-	i = 0;
-	env->num_of_philos = ft_atol(argv[1]);
-	env->time_to_die = ft_atol(argv[2]);
-	env->time_to_eat = ft_atol(argv[3]);
-	env->time_to_sleep = ft_atol(argv[4]);
+	env->num_of_philos = (uint32_t)ft_atol(argv[1]);
+	env->time_to_die = (uint32_t)ft_atol(argv[2]);
+	env->time_to_eat = (uint32_t)ft_atol(argv[3]);
+	env->time_to_sleep = (uint32_t)ft_atol(argv[4]);
 	env->num_of_meals = 0;
 	if (argc > 5)
 		env->num_of_meals = ft_atol(argv[5]);
-//	while (i < env->num_of_philos)
-//	{
-//		printf("test\n");
-//		env->fork + i) = (mutex *)malloc(sizeof(mutex));
-////		(env->fork + i) = (mutex *)malloc(sizeof(mutex));
-//		i++;
-//	}
 }
 
 int	init_data(t_env	*env, int argc, char **argv)

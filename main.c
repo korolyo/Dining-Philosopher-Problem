@@ -14,10 +14,10 @@
 
 void	*monitor(void *args)
 {
-	t_env	*env;
-	int		i;
-	int		k;
-	int64_t	time_ms;
+	t_env		*env;
+	uint32_t	i;
+	int			k;
+	int64_t		time_ms;
 
 	env = (t_env *)args;
 	i = 0;
@@ -43,39 +43,51 @@ void	*monitor(void *args)
 
 void	*philo_alive(void *args)
 {
-	t_philo	*philo;
+	t_philo		*philo;
+	int64_t	time;
 
 	philo = (t_philo*)args;
 	philo->timestamp = get_time_ms();
+	time = philo->timestamp;
 	if (philo->id % 2 == 1)
 	{
-		pthread_mutex_lock(philo->right_fork);
 		pthread_mutex_lock(philo->left_fork);
-		philo->timestamp = philo->timestamp + philo->env->time_to_eat;
+		pthread_mutex_lock(philo->right_fork);
+//		philo->timestamp = get_time_ms();
 		printf("%lld %lld" EAT "\n", philo->timestamp, philo->id);
-		philo->timestamp = get_time_ms();
+		philo->timestamp = philo->timestamp + philo->env->time_to_eat;
 		usleep(philo->env->time_to_eat);
-		pthread_mutex_unlock(philo->right_fork);
+		philo->timestamp = get_time_ms();
 		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
+		printf("%lld %lld" SLEEP "\n", philo->timestamp, philo->id);
+		usleep(philo->env->time_to_sleep);
+		philo->timestamp = philo->timestamp + philo->env->time_to_sleep;
 	}
 	else
-		usleep(10000);
+		usleep(1000);
 	while (philo->is_dead == 0)
 	{
 //		printf("start\n");
 //		printf("%lld\n", philo->id);
+//		philo->timestamp = get_time_ms();
+//		printf("time_to_eat = %lld\n", philo->env->time_to_eat);
+//		printf("time_to_sleep = %lld\n", philo->env->time_to_sleep);
+//		printf("time_to_die = %lld\n", philo->env->time_to_die);
 		printf("%lld %lld" THINK "\n", philo->timestamp, philo->id);
-		pthread_mutex_lock(philo->right_fork);
 		pthread_mutex_lock(philo->left_fork);
-		philo->timestamp = philo->timestamp + philo->env->time_to_eat;
-		printf("%lld %lld" EAT "\n", philo->timestamp, philo->id);
-		philo->timestamp = get_time_ms();
+		pthread_mutex_lock(philo->right_fork);
+		time = get_time_ms();
+		printf("%lld %lld" EAT "\n", time, philo->id);
+		time = time + philo->env->time_to_eat;
 		usleep(philo->env->time_to_eat);
-		pthread_mutex_unlock(philo->right_fork);
+		philo->timestamp = get_time_ms();
 		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
 //		philo->timestamp = get_time_ms();
 		printf("%lld %lld" SLEEP "\n", philo->timestamp, philo->id);
 		usleep(philo->env->time_to_sleep);
+		philo->timestamp = philo->timestamp + philo->env->time_to_sleep;
 //		usleep(100000);
 	}
 	return (NULL);
@@ -101,6 +113,7 @@ int	threads(t_env *env)
 		pthread_create(&(env->philo)[i], NULL, &philo_alive,
 			(void *)(env->philosopher + i));
 		i++;
+//		usleep(1000000);
 	}
 	pthread_create(&waiter, NULL, &monitor, (void *)env);
 	pthread_join(waiter, NULL);

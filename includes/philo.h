@@ -70,11 +70,11 @@ struct		s_philo
 // PARSED ARGS
 struct		s_env
 {
-	int64_t		num_of_philos;
-	int64_t		time_to_die;
-	int64_t		time_to_eat;
-	int64_t		time_to_sleep;
-	int64_t		num_of_meals;
+	uint32_t	num_of_philos;
+	uint32_t	time_to_die;
+	uint32_t	time_to_eat;
+	uint32_t	time_to_sleep;
+	uint64_t	num_of_meals;
 	pthread_t	philo[PHILO_MAX];
 	mutex 		fork[PHILO_MAX];
 	t_philo 	*philosopher;
