@@ -22,16 +22,6 @@ int	check_argv(int argc, char **argv)
 	return (1);
 }
 
-int64_t	get_time_ms(void)
-{
-	struct timeval	tv;
-	int64_t			time_in_mill;
-
-	gettimeofday(&tv, NULL);
-	time_in_mill = (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000;
-	return (time_in_mill);
-}
-
 int	init_forks(t_env *env)
 {
 	int64_t	i;

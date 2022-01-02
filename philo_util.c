@@ -36,3 +36,23 @@ int64_t	ft_atol(const char *nptr)
 	}
 	return (n * sign);
 }
+
+int64_t	get_time_ms(void)
+{
+	struct timeval	tv;
+	int64_t			time_in_mill;
+
+	gettimeofday(&tv, NULL);
+	time_in_mill = (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000;
+	return (time_in_mill);
+}
+
+void	ft_usleep(int ms)
+{
+	long	time;
+
+	time = get_time_ms();
+	usleep(ms * 920);
+	while (get_time_ms() < time + (long)ms)
+		usleep(ms * 3);
+}

@@ -87,6 +87,7 @@ int		init_philo(t_env *env);
 int		init_forks(t_env *env);
 void	init_waiter(t_env *env);
 int64_t	get_time_ms(void);
+void	ft_usleep(int ms);
 int		threads(t_env *env);
 void	*philo_alive(void *args);
 int		gettime_ms();
