@@ -48,23 +48,23 @@
 typedef struct s_env	t_env;
 typedef struct s_philo	t_philo;
 typedef struct s_waiter	t_waiter;
-typedef pthread_mutex_t	mutex;
-typedef	struct	timeval	t_time;
+typedef pthread_mutex_t	t_mutex;
+typedef struct timeval	t_time;
 
 struct		s_waiter
 {
-	int64_t i;
+	int64_t	i;
 };
 
 struct		s_philo
 {
 	int64_t	id;
-	int64_t timestamp;
+	int64_t	timestamp;
 	int64_t	start_time;
 	int64_t	num_of_philos;
-	int64_t is_dead;
-	mutex 	*left_fork;
-	mutex 	*right_fork;
+	int64_t	is_dead;
+	t_mutex	*left_fork;
+	t_mutex	*right_fork;
 	t_env	*env;
 };
 
@@ -77,9 +77,9 @@ struct		s_env
 	uint32_t	time_to_sleep;
 	uint64_t	num_of_meals;
 	pthread_t	philo[PHILO_MAX];
-	mutex 		fork[PHILO_MAX];
-	mutex		*message;
-	t_philo 	*philosopher;
+	t_mutex		fork[PHILO_MAX];
+	t_mutex		*message;
+	t_philo		*philosopher;
 };
 
 int		check_argv(int argc, char **argv);

@@ -16,7 +16,7 @@ void	write_message(t_philo *philo, char *message)
 {
 	pthread_mutex_lock(philo->env->message);
 	printf("%lld %lld%s\n", get_time_ms() - philo->start_time,
-		   philo->id, message);
+		philo->id, message);
 	pthread_mutex_unlock(philo->env->message);
 }
 
@@ -30,6 +30,7 @@ void	*monitor(void *args)
 	i = 0;
 	while (21)
 	{
+		usleep(100);
 		i = 0;
 		while (i < env->num_of_philos)
 		{
@@ -37,9 +38,8 @@ void	*monitor(void *args)
 			if (time_ms - env->time_to_die > env->philosopher[i].timestamp)
 			{
 				env->philosopher[i].is_dead = 1;
-				printf("%lld %lld" DEATH "\n", time_ms - env->philosopher[i]
-				.timestamp,
-					env->philosopher[i].id);
+				printf("%lld %lld" DEATH "\n", time_ms
+					- env->philosopher[i].timestamp, env->philosopher[i].id);
 				return (NULL);
 			}
 			i++;
@@ -51,7 +51,7 @@ void	*philo_alive(void *args)
 {
 	t_philo		*philo;
 
-	philo = (t_philo*)args;
+	philo = (t_philo *)args;
 	philo->timestamp = get_time_ms();
 	philo->start_time = get_time_ms();
 	if (philo->id % 2 == 1)

@@ -30,8 +30,8 @@ int	init_forks(t_env *env)
 	while (i < env->num_of_philos)
 	{
 		(env->philosopher + i)->right_fork = &(env->fork[i]);
-		(env->philosopher + i)->left_fork =
-			&(env->fork[(i + 1) % env->num_of_philos]);
+		(env->philosopher + i)->left_fork = &(env->fork[(i + 1)
+				% env->num_of_philos]);
 		i++;
 	}
 	return (0);
@@ -52,7 +52,6 @@ int	init_philo(t_env *env)
 		(philo + i)->id = i + 1;
 		(philo + i)->timestamp = get_time_ms();
 		(philo + i)->env = env;
-//		printf("philo[%lld] in init = %lld\n", i, (philo + i)->id);
 		i++;
 	}
 	env->philosopher = philo;
@@ -66,7 +65,7 @@ void	init_env(t_env *env, int argc, char **argv)
 	env->time_to_eat = (uint32_t)ft_atol(argv[3]);
 	env->time_to_sleep = (uint32_t)ft_atol(argv[4]);
 	env->num_of_meals = 0;
-	env->message = (mutex *)malloc(sizeof (mutex));
+	env->message = (t_mutex *)malloc(sizeof (t_mutex));
 	pthread_mutex_init(env->message, NULL);
 	if (argc > 5)
 		env->num_of_meals = ft_atol(argv[5]);
@@ -76,8 +75,8 @@ int	init_data(t_env	*env, int argc, char **argv)
 {
 	init_env(env, argc, argv);
 	if (init_philo(env) == -1)
-		return(-1);
+		return (-1);
 	if (init_forks(env) == -1)
-		return(-1);
+		return (-1);
 	return (0);
 }
