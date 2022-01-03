@@ -51,7 +51,6 @@ int	init_philo(t_env *env)
 		(philo + i)->is_dead = 0;
 		(philo + i)->id = i + 1;
 		(philo + i)->timestamp = get_time_ms();
-		(philo + i)->state = HUNGRY;
 		(philo + i)->env = env;
 //		printf("philo[%lld] in init = %lld\n", i, (philo + i)->id);
 		i++;
@@ -67,6 +66,8 @@ void	init_env(t_env *env, int argc, char **argv)
 	env->time_to_eat = (uint32_t)ft_atol(argv[3]);
 	env->time_to_sleep = (uint32_t)ft_atol(argv[4]);
 	env->num_of_meals = 0;
+	env->message = (mutex *)malloc(sizeof (mutex));
+	pthread_mutex_init(env->message, NULL);
 	if (argc > 5)
 		env->num_of_meals = ft_atol(argv[5]);
 }

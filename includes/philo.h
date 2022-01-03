@@ -37,7 +37,8 @@
 //===========================================
 
 // ANSI colored output
-# define FORK		"\x1b[33m has taken a fork\x1b[0m"
+# define FORK_LEFT	"\x1b[33m has taken a fork left\x1b[0m"
+# define FORK_RIGHT	"\x1b[33m has taken a fork right\x1b[0m"
 # define EAT			"\x1b[35m is eating\x1b[0m"
 # define SLEEP		"\x1b[34m is sleeping\x1b[0m"
 # define THINK		"\x1b[32m is thinking\x1b[0m"
@@ -59,7 +60,7 @@ struct		s_philo
 {
 	int64_t	id;
 	int64_t timestamp;
-	int64_t state;
+	int64_t	start_time;
 	int64_t	num_of_philos;
 	int64_t is_dead;
 	mutex 	*left_fork;
@@ -77,6 +78,7 @@ struct		s_env
 	uint64_t	num_of_meals;
 	pthread_t	philo[PHILO_MAX];
 	mutex 		fork[PHILO_MAX];
+	mutex		*message;
 	t_philo 	*philosopher;
 };
 
@@ -85,12 +87,10 @@ int		init_data(t_env *env, int argc, char **argv);
 void	init_env(t_env *env, int argc, char **argv);
 int		init_philo(t_env *env);
 int		init_forks(t_env *env);
-void	init_waiter(t_env *env);
 int64_t	get_time_ms(void);
 void	ft_usleep(int ms);
 int		threads(t_env *env);
 void	*philo_alive(void *args);
-int		gettime_ms();
 
 // SOME UTILS
 int64_t	ft_atol(const char *nptr);
