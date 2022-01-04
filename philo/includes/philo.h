@@ -65,6 +65,7 @@ struct		s_philo
 	int64_t	is_dead;
 	t_mutex	*left_fork;
 	t_mutex	*right_fork;
+	t_mutex	death;
 	t_env	*env;
 };
 

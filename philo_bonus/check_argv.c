@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 int	check_argv(int argc, char **argv)
 {
@@ -46,12 +46,14 @@ int	init_philo(t_env *env)
 	philo = (t_philo *)malloc(sizeof(t_philo) * env->num_of_philos);
 	if (!philo)
 		return (-1);
+	sem_init(&philo[i].death, 0, 0);
 	while (i < env->num_of_philos)
 	{
 		(philo + i)->is_dead = 0;
 		(philo + i)->id = i + 1;
 		(philo + i)->timestamp = get_time_ms();
 		(philo + i)->env = env;
+		(philo + i)->state = HUNGRY;
 		i++;
 	}
 	env->philosopher = philo;
@@ -65,8 +67,8 @@ void	init_env(t_env *env, int argc, char **argv)
 	env->time_to_eat = (uint32_t)ft_atol(argv[3]);
 	env->time_to_sleep = (uint32_t)ft_atol(argv[4]);
 	env->num_of_meals = 0;
-	env->message = (t_mutex *)malloc(sizeof (t_mutex));
-	pthread_mutex_init(env->message, NULL);
+	env->message = (sem_t *)malloc(sizeof (sem_t));
+	sem_init(env->message, 0, 0);
 	if (argc > 5)
 		env->num_of_meals = ft_atol(argv[5]);
 }

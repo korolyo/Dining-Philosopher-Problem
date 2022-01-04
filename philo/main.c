@@ -38,8 +38,7 @@ void	*monitor(void *args)
 			if (time_ms - env->time_to_die > env->philosopher[i].timestamp)
 			{
 				env->philosopher[i].is_dead = 1;
-				printf("%lld %lld" DEATH "\n", time_ms
-					- env->philosopher[i].timestamp, env->philosopher[i].id);
+				write_message(&env->philosopher[i], DEATH);
 				return (NULL);
 			}
 			i++;
@@ -52,8 +51,8 @@ void	*philo_alive(void *args)
 	t_philo		*philo;
 
 	philo = (t_philo *)args;
-	philo->timestamp = get_time_ms();
 	philo->start_time = get_time_ms();
+	philo->timestamp = philo->start_time;
 	if (philo->id % 2 == 1)
 		ft_usleep(10);
 	while (philo->is_dead == 0)
@@ -62,12 +61,14 @@ void	*philo_alive(void *args)
 		pthread_mutex_lock(philo->left_fork);
 		write_message(philo, FORK_LEFT);
 		pthread_mutex_lock(philo->right_fork);
+		pthread_mutex_lock(&philo->death);
 		philo->timestamp = get_time_ms();
 		write_message(philo, FORK_RIGHT);
 		write_message(philo, EAT);
 		ft_usleep(philo->env->time_to_eat);
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(&philo->death);
 		write_message(philo, SLEEP);
 		ft_usleep(philo->env->time_to_sleep);
 	}

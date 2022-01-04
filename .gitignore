@@ -1,0 +1,6 @@
+.DS_Store
+.idea
+philo/cmake-build-debug/
+*.o
+LICENSE
+README.md
