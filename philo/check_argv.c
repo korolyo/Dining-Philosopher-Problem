@@ -46,9 +46,9 @@ int	init_philo(t_env *env)
 	philo = (t_philo *)malloc(sizeof(t_philo) * env->num_of_philos);
 	if (!philo)
 		return (-1);
-	pthread_mutex_init(&philo[i].death, NULL);
 	while (i < env->num_of_philos)
 	{
+		pthread_mutex_init(&philo[i].death, NULL);
 		(philo + i)->is_dead = 0;
 		(philo + i)->id = i + 1;
 		(philo + i)->timestamp = get_time_ms();

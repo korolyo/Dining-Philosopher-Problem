@@ -14,9 +14,26 @@
 
 void	write_message(t_philo *philo, char *message)
 {
+	static int	done;
+
+	done = 0;
 	pthread_mutex_lock(philo->env->message);
-	printf("%lld %lld%s\n", get_time_ms() - philo->start_time,
-		philo->id, message);
+	if (done == 0)
+	{
+		if (message == DEATH)
+		{
+			done = 1;
+			printf("%lld %lld%s\n", get_time_ms() - philo->start_time,
+				   philo->id, message);
+		}
+		else if (message == EAT)
+			printf(EAT);
+		else if (message == THINK)
+			prinf(THINK);
+		else if (message == SLEEP)
+			printf(SLEEP);
+		else if (message == )
+	}
 	pthread_mutex_unlock(philo->env->message);
 }
 
@@ -35,12 +52,15 @@ void	*monitor(void *args)
 		while (i < env->num_of_philos)
 		{
 			time_ms = get_time_ms();
+			pthread_mutex_lock(&env->philosopher[i].death);
 			if (time_ms - env->time_to_die > env->philosopher[i].timestamp)
 			{
+				pthread_mutex_unlock(&env->philosopher[i].death);
 				env->philosopher[i].is_dead = 1;
 				write_message(&env->philosopher[i], DEATH);
 				return (NULL);
 			}
+			pthread_mutex_unlock(&env->philosopher[i].death);
 			i++;
 		}
 	}
