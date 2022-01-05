@@ -16,7 +16,7 @@ int	check_argv(int argc, char **argv)
 {
 	if (argc < 5 || ft_atol(argv[1]) <= 0 || ft_atol(argv[1]) > PHILO_MAX)
 	{
-		printf(ERROR);
+		printf(ERROR_MESSAGE);
 		return (0);
 	}
 	return (1);
@@ -66,8 +66,7 @@ void	init_env(t_env *env, int argc, char **argv)
 	env->time_to_eat = (uint32_t)ft_atol(argv[3]);
 	env->time_to_sleep = (uint32_t)ft_atol(argv[4]);
 	env->num_of_meals = 0;
-	env->message = (t_mutex *)malloc(sizeof (t_mutex));
-	pthread_mutex_init(env->message, NULL);
+	pthread_mutex_init(&env->message, NULL);
 	if (argc > 5)
 		env->num_of_meals = ft_atol(argv[5]);
 }

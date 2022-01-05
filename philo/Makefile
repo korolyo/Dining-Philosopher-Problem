@@ -4,6 +4,9 @@ NAME	=	philo
 SOURCES_LIST	= 	main.c\
 					philo_util.c\
 					check_argv.c\
+					messaging.c\
+					monitor.c\
+					actions.c\
 
 CC		= gcc
 CFLAGS	=	-Werror -Wall -Wextra -g

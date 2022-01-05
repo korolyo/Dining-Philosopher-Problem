@@ -12,60 +12,6 @@
 
 #include "philo.h"
 
-void	write_message(t_philo *philo, char *message)
-{
-	static int	done;
-
-	done = 0;
-	pthread_mutex_lock(philo->env->message);
-	if (done == 0)
-	{
-		if (message == DEATH)
-		{
-			done = 1;
-			printf("%lld %lld%s\n", get_time_ms() - philo->start_time,
-				   philo->id, message);
-		}
-		else if (message == EAT)
-			printf(EAT);
-		else if (message == THINK)
-			prinf(THINK);
-		else if (message == SLEEP)
-			printf(SLEEP);
-		else if (message == )
-	}
-	pthread_mutex_unlock(philo->env->message);
-}
-
-void	*monitor(void *args)
-{
-	t_env		*env;
-	uint32_t	i;
-	int64_t		time_ms;
-
-	env = (t_env *)args;
-	i = 0;
-	while (21)
-	{
-		usleep(100);
-		i = 0;
-		while (i < env->num_of_philos)
-		{
-			time_ms = get_time_ms();
-			pthread_mutex_lock(&env->philosopher[i].death);
-			if (time_ms - env->time_to_die > env->philosopher[i].timestamp)
-			{
-				pthread_mutex_unlock(&env->philosopher[i].death);
-				env->philosopher[i].is_dead = 1;
-				write_message(&env->philosopher[i], DEATH);
-				return (NULL);
-			}
-			pthread_mutex_unlock(&env->philosopher[i].death);
-			i++;
-		}
-	}
-}
-
 void	*philo_alive(void *args)
 {
 	t_philo		*philo;
@@ -77,20 +23,10 @@ void	*philo_alive(void *args)
 		ft_usleep(10);
 	while (philo->is_dead == 0)
 	{
-		write_message(philo, THINK);
-		pthread_mutex_lock(philo->left_fork);
-		write_message(philo, FORK_LEFT);
-		pthread_mutex_lock(philo->right_fork);
-		pthread_mutex_lock(&philo->death);
-		philo->timestamp = get_time_ms();
-		write_message(philo, FORK_RIGHT);
-		write_message(philo, EAT);
-		ft_usleep(philo->env->time_to_eat);
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-		pthread_mutex_unlock(&philo->death);
-		write_message(philo, SLEEP);
-		ft_usleep(philo->env->time_to_sleep);
+		take_forks(philo);
+		eat(philo);
+		philo_sleep(philo);
+		think(philo);
 	}
 	return (NULL);
 }
@@ -113,7 +49,7 @@ int	threads(t_env *env)
 			(void *)(env->philosopher + i));
 		i++;
 	}
-	pthread_create(&waiter, NULL, &monitor, (void *)env);
+	pthread_create(&waiter, NULL, &monitor, (void *)env->philosopher);
 	pthread_join(waiter, NULL);
 	return (0);
 }
@@ -126,9 +62,10 @@ int	main(int argc, char **argv)
 		return (0);
 	if (init_data(&env, argc, argv) == -1)
 	{
-		printf(ERROR);
+		printf(ERROR_MESSAGE);
 		return (0);
 	}
 	threads(&env);
+//	clean_all(&env);
 	return (0);
 }
