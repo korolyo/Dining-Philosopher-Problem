@@ -4,3 +4,4 @@ philo/cmake-build-debug/
 *.o
 LICENSE
 README.md
+philo.dSYM/Contents
