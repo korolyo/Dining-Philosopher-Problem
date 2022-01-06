@@ -12,11 +12,32 @@
 
 #include "philo.h"
 
+int	finishing(t_philo *philo, uint32_t i)
+{
+	if (get_time_ms() - philo->env->time_to_die > philo[i].timestamp
+		|| (philo->env->num_of_meals >= 0 && philo->env->counting_meals < 0))
+	{
+		pthread_mutex_unlock(&philo[i].death);
+		if (philo->env->num_of_meals >= 0
+			&& philo->env->counting_meals < 0)
+			write_message(&philo[i], FINAL_MEAL);
+		else
+			write_message(&philo[i], DEATH);
+		i = 0;
+		while (i < philo->env->num_of_philos)
+		{
+			philo[i].is_dead = 1;
+			i++;
+		}
+		return (0);
+	}
+	return (1);
+}
+
 void	*monitor(void *args)
 {
 	t_philo		*philo;
 	uint32_t	i;
-	int64_t		time_ms;
 
 	philo = (t_philo *)args;
 	i = 0;
@@ -26,20 +47,9 @@ void	*monitor(void *args)
 		i = 0;
 		while (i < philo->env->num_of_philos)
 		{
-			time_ms = get_time_ms();
 			pthread_mutex_lock(&philo[i].death);
-			if (time_ms - philo->env->time_to_die > philo[i].timestamp)
-			{
-				pthread_mutex_unlock(&philo[i].death);
-				write_message(&philo[i], DEATH);
-				i = 0;
-				while (i < philo->env->num_of_philos)
-				{
-					philo[i].is_dead = 1;
-					i++;
-				}
+			if (!finishing(philo, i))
 				return (NULL);
-			}
 			pthread_mutex_unlock(&philo[i].death);
 			i++;
 		}

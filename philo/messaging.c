@@ -36,8 +36,14 @@ void	write_message(t_philo *philo, int message)
 	pthread_mutex_lock(&philo->env->message);
 	if (done == 0)
 	{
-		if (message == DEATH)
+		if (message == DEATH || message == FINAL_MEAL)
 			done = 1;
+		if (message == FINAL_MEAL)
+		{
+			printf(FINAL_MEAL_MESSAGE " %lld times\n",
+				philo->env->num_of_meals);
+			return ;
+		}
 		printf("%lld %lld%s\n", get_time_ms() - philo->start_time,
 			philo->id, get_message(message));
 	}

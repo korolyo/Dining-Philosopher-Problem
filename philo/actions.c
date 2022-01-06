@@ -25,7 +25,7 @@ void	eat(t_philo *philo)
 	philo->timestamp = get_time_ms();
 	write_message(philo, EAT);
 	ft_usleep(philo->env->time_to_eat);
-	philo->env->num_of_meals--;
+	philo->env->counting_meals--;
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }

@@ -59,13 +59,16 @@ int	main(int argc, char **argv)
 	t_env	env;
 
 	if (!check_argv(argc, argv))
+	{
+		printf(ERROR_MESSAGE);
 		return (0);
+	}
 	if (init_data(&env, argc, argv) == -1)
 	{
 		printf(ERROR_MESSAGE);
 		return (0);
 	}
 	threads(&env);
-//	clean_all(&env);
+	clean_all(&env);
 	return (0);
 }

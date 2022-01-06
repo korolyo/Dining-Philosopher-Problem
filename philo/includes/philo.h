@@ -33,6 +33,7 @@
 # define THINK		55
 # define DEATH		66
 # define ERROR		77
+# define FINAL_MEAL	88
 
 // ANSI colored output
 
@@ -42,7 +43,8 @@
 # define SLEEP_MESSAGE		"\x1b[34m is sleeping\x1b[0m"
 # define THINK_MESSAGE		"\x1b[32m is thinking\x1b[0m"
 # define DEATH_MESSAGE		"\x1b[31m died\x1b[0m"
-# define ERROR_MESSAGE		"\x1b[31m Error\x1b[0m"
+# define FINAL_MEAL_MESSAGE	"Each philosopher ate at least"
+# define ERROR_MESSAGE		"\x1b[31m Error\n\x1b[0m"
 
 typedef struct s_env	t_env;
 typedef struct s_philo	t_philo;
@@ -76,6 +78,7 @@ struct		s_env
 	uint32_t	time_to_eat;
 	uint32_t	time_to_sleep;
 	int64_t		num_of_meals;
+	int64_t		counting_meals;
 	pthread_t	philo[PHILO_MAX];
 	t_mutex		fork[PHILO_MAX];
 	t_mutex		message;
@@ -91,9 +94,11 @@ int64_t	get_time_ms(void);
 void	write_message(t_philo *philo, int message);
 char	*get_message(int message);
 void	*monitor(void *args);
+int		finishing(t_philo *philo, uint32_t i);
 void	ft_usleep(int ms);
 int		threads(t_env *env);
 void	*philo_alive(void *args);
+void	clean_all(t_env *env);
 
 // ACTIONS
 void	take_forks(t_philo *philo);
@@ -103,5 +108,6 @@ void	think(t_philo *philo);
 
 // SOME UTILS
 int64_t	ft_atol(const char *nptr);
+int		ft_isdigit(int c);
 
 #endif

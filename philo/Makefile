@@ -7,6 +7,7 @@ SOURCES_LIST	= 	main.c\
 					messaging.c\
 					monitor.c\
 					actions.c\
+					clean_all.c\
 
 CC		= gcc
 CFLAGS	=	-Werror -Wall -Wextra -g

@@ -14,10 +14,22 @@
 
 int	check_argv(int argc, char **argv)
 {
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
 	if (argc < 5 || ft_atol(argv[1]) <= 0 || ft_atol(argv[1]) > PHILO_MAX)
-	{
-		printf(ERROR_MESSAGE);
 		return (0);
+	while (++j < argc)
+	{
+		i = 0;
+		while (argv[j][i])
+		{
+			if (!ft_isdigit(argv[j][i]))
+				return (0);
+			i++;
+		}
 	}
 	return (1);
 }
@@ -65,10 +77,14 @@ void	init_env(t_env *env, int argc, char **argv)
 	env->time_to_die = (uint32_t)ft_atol(argv[2]);
 	env->time_to_eat = (uint32_t)ft_atol(argv[3]);
 	env->time_to_sleep = (uint32_t)ft_atol(argv[4]);
-	env->num_of_meals = 0;
+	env->num_of_meals = -1;
+	env->counting_meals = 0;
 	pthread_mutex_init(&env->message, NULL);
 	if (argc > 5)
+	{
 		env->num_of_meals = ft_atol(argv[5]);
+		env->counting_meals = env->num_of_meals * env->num_of_philos;
+	}
 }
 
 int	init_data(t_env	*env, int argc, char **argv)
