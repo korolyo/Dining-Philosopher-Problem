@@ -12,21 +12,19 @@
 
 #include "philo_bonus.h"
 
-void	finish_mutexes(t_env *env)
+void	finish_semaphors(t_env *env)
 {
 	int64_t	i;
 
 	i = 0;
-	sem destroy (env->fork);
+	sem_unlink(env->fork);
 	while (i < env->num_of_philos)
 	{
-		pthread_mutex_unlock(&(env->fork[i]));
-		pthread_mutex_unlock(&(env->philosopher[i].death));
-		sem destroy(&(env->fork[i]));
-		sem destroy(&(env->philosopher[i].death));
+		sem_unlink(&(env->fork[i]));
+		sem_unlink(&(env->philosopher[i].death));
 		i++;
 	}
-	sem destroy(&(env->message));
+	sem_unlink(&(env->message));
 }
 
 void	finish_threads(t_env *env)
@@ -45,5 +43,5 @@ void	finish_threads(t_env *env)
 void	clean_all(t_env *env)
 {
 	finish_threads(env);
-	finish_mutexes(env);
+	finish_semaphors(env);
 }

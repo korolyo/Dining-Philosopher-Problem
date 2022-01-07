@@ -103,6 +103,8 @@ void	ft_usleep(int ms);
 int		threads(t_env *env);
 void	*philo_alive(void *args);
 void	clean_all(t_env *env);
+void	finish_semaphors(t_env *env);
+void	finish_threads(t_env *env);
 
 // ACTIONS
 void	take_forks(t_philo *philo);
