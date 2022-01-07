@@ -31,14 +31,27 @@
 # define EATING		2
 # define THINKING	3
 
+//STATES OF PHILOS
+
+# define FORK_LEFT	11
+# define FORK_RIGHT	22
+# define EAT			33
+# define SLEEP		44
+# define THINK		55
+# define DEATH		66
+# define ERROR		77
+# define FINAL_MEAL	88
+
 // ANSI colored output
-# define FORK_LEFT	"\x1b[33m has taken a fork left\x1b[0m"
-# define FORK_RIGHT	"\x1b[33m has taken a fork right\x1b[0m"
-# define EAT			"\x1b[35m is eating\x1b[0m"
-# define SLEEP		"\x1b[34m is sleeping\x1b[0m"
-# define THINK		"\x1b[32m is thinking\x1b[0m"
-# define DEATH		"\x1b[31m died\x1b[0m"
-# define ERROR		"\x1b[31m Error\x1b[0m"
+
+# define FORK_LEFT_MESSAGE	"\x1b[33m has taken a fork\x1b[0m"
+# define FORK_RIGHT_MESSAGE	"\x1b[33m has taken a fork\x1b[0m"
+# define EAT_MESSAGE			"\x1b[35m is eating\x1b[0m"
+# define SLEEP_MESSAGE		"\x1b[34m is sleeping\x1b[0m"
+# define THINK_MESSAGE		"\x1b[32m is thinking\x1b[0m"
+# define DEATH_MESSAGE		"\x1b[31m died\x1b[0m"
+# define FINAL_MEAL_MESSAGE	"Each philosopher ate at least"
+# define ERROR_MESSAGE		"\x1b[31m Error\n\x1b[0m"
 
 typedef struct s_env	t_env;
 typedef struct s_philo	t_philo;
@@ -57,9 +70,6 @@ struct		s_philo
 	int64_t	start_time;
 	int64_t	num_of_philos;
 	int64_t	is_dead;
-	int64_t state[PHILO_MAX];
-	sem_t	*left_fork;
-	sem_t	*right_fork;
 	sem_t	death;
 	t_env	*env;
 };
@@ -71,10 +81,11 @@ struct		s_env
 	uint32_t	time_to_die;
 	uint32_t	time_to_eat;
 	uint32_t	time_to_sleep;
-	uint64_t	num_of_meals;
+	int64_t		num_of_meals;
+	int64_t		counting_meals;
 	pthread_t	philo[PHILO_MAX];
 	sem_t		fork[PHILO_MAX];
-	sem_t		*message;
+	sem_t		message;
 	t_philo		*philosopher;
 };
 
@@ -84,11 +95,23 @@ void	init_env(t_env *env, int argc, char **argv);
 int		init_philo(t_env *env);
 int		init_forks(t_env *env);
 int64_t	get_time_ms(void);
+void	write_message(t_philo *philo, int message);
+char	*get_message(int message);
+void	*monitor(void *args);
+int		finishing(t_philo *philo, uint32_t i);
 void	ft_usleep(int ms);
 int		threads(t_env *env);
 void	*philo_alive(void *args);
+void	clean_all(t_env *env);
+
+// ACTIONS
+void	take_forks(t_philo *philo);
+void	eat(t_philo *philo);
+void	philo_sleep(t_philo *philo);
+void	think(t_philo *philo);
 
 // SOME UTILS
 int64_t	ft_atol(const char *nptr);
+int		ft_isdigit(int c);
 
 #endif

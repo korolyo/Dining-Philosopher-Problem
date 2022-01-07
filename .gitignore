@@ -2,6 +2,7 @@
 .idea
 philo/cmake-build-debug/
 *.o
+*.d
 LICENSE
 README.md
 philo.dSYM/Contents

@@ -12,6 +12,13 @@
 
 #include "philo_bonus.h"
 
+int	ft_isdigit(int c)
+{
+	if (((char)c >= '0') && (c <= '9'))
+		return (1);
+	return (0);
+}
+
 int64_t	ft_atol(const char *nptr)
 {
 	int64_t	n;
