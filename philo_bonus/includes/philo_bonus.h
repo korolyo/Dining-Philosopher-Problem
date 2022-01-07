@@ -65,7 +65,7 @@ struct		s_waiter
 
 struct		s_philo
 {
-	int64_t	id;
+	pid_t	pid;
 	int64_t	timestamp;
 	int64_t	start_time;
 	int64_t	num_of_philos;
@@ -101,7 +101,7 @@ void	*monitor(void *args);
 int		finishing(t_philo *philo, uint32_t i);
 void	ft_usleep(int ms);
 int		threads(t_env *env);
-void	*philo_alive(void *args);
+void	*philo_alive(t_philo *philo);
 void	clean_all(t_env *env);
 void	finish_semaphors(t_env *env);
 void	finish_threads(t_env *env);

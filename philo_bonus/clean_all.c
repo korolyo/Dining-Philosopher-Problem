@@ -34,7 +34,7 @@ void	finish_threads(t_env *env)
 	i = 0;
 	while (i < env->num_of_philos)
 	{
-		kill  (env->philo[i]);
+		kill(env->philo[i], 0);
 		i++;
 	}
 	free(env->philosopher);

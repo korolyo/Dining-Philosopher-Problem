@@ -12,14 +12,11 @@
 
 #include "philo_bonus.h"
 
-void	*philo_alive(void *args)
+void	*philo_alive(t_philo *philo)
 {
-	t_philo		*philo;
-
-	philo = (t_philo *)args;
 	philo->start_time = get_time_ms();
 	philo->timestamp = philo->start_time;
-	if (philo->id % 2 == 1)
+	if (philo->pid % 2 == 1)
 		ft_usleep(10);
 	while (philo->is_dead == 0)
 	{
@@ -33,21 +30,19 @@ void	*philo_alive(void *args)
 
 int	threads(t_env *env)
 {
-	pid_t		pid;
 	pthread_t	waiter;
 	int64_t		i;
 
 	i = 0;
 	while (i < env->num_of_philos)
 	{
-		sem _ init(&(env->fork[i]), NULL);
+		env->philosopher[i].pid = fork ();
 		i++;
 	}
 	i = 0;
 	while (i < env->num_of_philos)
 	{
-		pid = fork (&(env->philo)[i], NULL, &philo_alive,
-			(void *)(env->philosopher + i));
+		sem_init(&(env->fork[i]), 1, 1);
 		i++;
 	}
 	pthread_create(&waiter, NULL, &monitor, (void *)env->philosopher);

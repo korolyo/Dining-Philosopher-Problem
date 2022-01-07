@@ -14,9 +14,9 @@
 
 void	take_forks(t_philo *philo)
 {
-	semafor for left fork close
+	sem_wait     (philo->env->pid[i]);
 	write_message(philo, FORK_LEFT);
-	semafor for right close
+	sem_wait     (philo->env->pid[i+1]);
 	write_message(philo, FORK_RIGHT);
 }
 
