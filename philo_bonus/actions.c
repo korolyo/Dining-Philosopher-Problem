@@ -14,9 +14,8 @@
 
 void	take_forks(t_philo *philo)
 {
-	sem_wait     (philo->env->pid[i]);
+	sem_wait(philo->env->fork);
 	write_message(philo, FORK_LEFT);
-	sem_wait     (philo->env->pid[i+1]);
 	write_message(philo, FORK_RIGHT);
 }
 
@@ -26,8 +25,7 @@ void	eat(t_philo *philo)
 	write_message(philo, EAT);
 	ft_usleep(philo->env->time_to_eat);
 	philo->env->counting_meals--;
-	sem_open(philo->left_fork);
-	sem_open(philo->right_fork);
+	sem_post(philo->env->fork);
 }
 
 void	philo_sleep(t_philo *philo)

@@ -47,10 +47,10 @@ void	*monitor(void *args)
 		i = 0;
 		while (i < philo->env->num_of_philos)
 		{
-			sem lock (&philo[i].death);
+			sem_wait(philo->env->death);
 			if (!finishing(philo, i))
 				return (NULL);
-			sem unlock(&philo[i].death);
+			sem_post(philo->env->death);
 			i++;
 		}
 	}

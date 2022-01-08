@@ -36,15 +36,10 @@ int	threads(t_env *env)
 	i = 0;
 	while (i < env->num_of_philos)
 	{
-		env->philosopher[i].pid = fork ();
+		env->philosopher[i].pid = fork();
 		i++;
 	}
 	i = 0;
-	while (i < env->num_of_philos)
-	{
-		sem_init(&(env->fork[i]), 1, 1);
-		i++;
-	}
 	pthread_create(&waiter, NULL, &monitor, (void *)env->philosopher);
 	pthread_join(waiter, NULL);
 	return (0);

@@ -14,17 +14,12 @@
 
 void	finish_semaphors(t_env *env)
 {
-	int64_t	i;
-
-	i = 0;
+	sem_close(env->fork);
+	sem_close(env->death);
+	sem_close(env->message);
 	sem_unlink(env->fork);
-	while (i < env->num_of_philos)
-	{
-		sem_unlink(&(env->fork[i]));
-		sem_unlink(&(env->philosopher[i].death));
-		i++;
-	}
-	sem_unlink(&(env->message));
+	sem_unlink(env->message);
+	sem_unlink(env->death);
 }
 
 void	finish_threads(t_env *env)
