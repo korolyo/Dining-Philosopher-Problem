@@ -17,7 +17,7 @@ int	finishing(t_philo *philo, uint32_t i)
 	if (get_time_ms() - philo->env->time_to_die > philo[i].timestamp
 		|| (philo->env->num_of_meals >= 0 && philo->env->counting_meals < 0))
 	{
-		sem unlock (&philo[i].death);
+		sem_post(philo->env->death);
 		if (philo->env->num_of_meals >= 0
 			&& philo->env->counting_meals < 0)
 			write_message(&philo[i], FINAL_MEAL);
@@ -26,7 +26,8 @@ int	finishing(t_philo *philo, uint32_t i)
 		i = 0;
 		while (i < philo->env->num_of_philos)
 		{
-			philo[i].is_dead = 1;
+			kill(philo[i].pid, SIGKILL);
+			usleep(1000);
 			i++;
 		}
 		return (0);

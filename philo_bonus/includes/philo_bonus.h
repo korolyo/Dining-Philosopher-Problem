@@ -23,6 +23,7 @@
 # include <sys/wait.h>
 # include <limits.h>
 # include <unistd.h>
+# include <signal.h>
 
 # define PHILO_MAX 200
 
@@ -72,7 +73,6 @@ struct		s_philo
 	pid_t	pid;
 	int64_t	id;
 	int64_t	timestamp;
-	int64_t	start_time;
 	int64_t	num_of_philos;
 	int64_t	is_dead;
 	t_env	*env;
@@ -87,7 +87,8 @@ struct		s_env
 	uint32_t	time_to_sleep;
 	int64_t		num_of_meals;
 	int64_t		counting_meals;
-	pthread_t	philo[PHILO_MAX];
+	int64_t		start_time;
+//	pthread_t	philo[PHILO_MAX];
 	sem_t		*fork;
 	sem_t		*message;
 	sem_t		*death;

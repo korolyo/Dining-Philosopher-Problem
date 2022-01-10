@@ -61,7 +61,7 @@ int	init_philo(t_env *env)
 	while (i < env->num_of_philos)
 	{
 		(philo + i)->is_dead = 0;
-		(philo + i)->id = 0;
+		(philo + i)->id = i + 1;
 		(philo + i)->timestamp = get_time_ms();
 		(philo + i)->env = env;
 		i++;

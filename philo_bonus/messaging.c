@@ -44,7 +44,7 @@ void	write_message(t_philo *philo, int message)
 				philo->env->num_of_meals);
 			return ;
 		}
-		printf("%lld %lld%s\n", get_time_ms() - philo->start_time,
+		printf("%lld %lld%s\n", get_time_ms() - philo->env->start_time,
 			philo->id, get_message(message));
 	}
 	sem_post(philo->env->message);

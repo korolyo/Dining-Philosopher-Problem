@@ -17,21 +17,21 @@ void	finish_semaphors(t_env *env)
 	sem_close(env->fork);
 	sem_close(env->death);
 	sem_close(env->message);
-	sem_unlink(env->fork);
-	sem_unlink(env->message);
-	sem_unlink(env->death);
+	sem_unlink(FORK_SEM);
+	sem_unlink(MESSAGE_SEM);
+	sem_unlink(DEATH_SEM);
 }
 
 void	finish_threads(t_env *env)
 {
-	int64_t	i;
-
-	i = 0;
-	while (i < env->num_of_philos)
-	{
-		kill(env->philo[i], 0);
-		i++;
-	}
+//	int64_t	i;
+//
+//	i = 0;
+//	while (i < env->num_of_philos)
+//	{
+//		kill(env->philosopher[i].pid, 0);
+//		i++;
+//	}
 	free(env->philosopher);
 }
 
