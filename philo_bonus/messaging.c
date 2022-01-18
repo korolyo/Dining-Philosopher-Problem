@@ -33,7 +33,7 @@ void	write_message(t_philo *philo, int message)
 {
 	static int	done = 0;
 
-	sem_wait(philo->env->message);
+//	sem_wait(philo->env->message);
 	if (done == 0)
 	{
 		if (message == DEATH || message == FINAL_MEAL)
@@ -47,5 +47,5 @@ void	write_message(t_philo *philo, int message)
 		printf("%lld %lld%s\n", get_time_ms() - philo->env->start_time,
 			philo->id, get_message(message));
 	}
-	sem_post(philo->env->message);
+//	sem_post(philo->env->message);
 }

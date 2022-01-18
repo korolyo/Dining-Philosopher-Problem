@@ -34,21 +34,6 @@ int	check_argv(int argc, char **argv)
 	return (1);
 }
 
-//int	init_forks(t_env *env)
-//{
-//	int64_t	i;
-//
-//	i = 0;
-//	while (i < env->num_of_philos)
-//	{
-//		(env->philosopher + i)->right_fork = &(env->fork[i]);
-//		(env->philosopher + i)->left_fork = &(env->fork[(i + 1)
-//				% env->num_of_philos]);
-//		i++;
-//	}
-//	return (0);
-//}
-
 int	init_philo(t_env *env)
 {
 	int64_t	i;
@@ -78,7 +63,7 @@ void	init_env(t_env *env, int argc, char **argv)
 	env->time_to_sleep = (uint32_t)ft_atol(argv[4]);
 	env->num_of_meals = -1;
 	env->counting_meals = 0;
-	env->fork = sem_open(FORK_SEM, O_CREAT);
+	env->fork = sem_open(FORK_SEM, O_CREAT, 0, env->num_of_philos);
 	env->message = sem_open(MESSAGE_SEM, O_CREAT);
 	env->death = sem_open(DEATH_SEM, O_CREAT);
 	if (argc > 5)
