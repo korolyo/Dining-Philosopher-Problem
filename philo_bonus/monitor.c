@@ -18,6 +18,8 @@ int	finishing(t_philo *philo, uint32_t i)
 		|| (philo->env->num_of_meals >= 0 && philo->env->counting_meals < 0))
 	{
 		sem_post(philo->env->death);
+		write_message(&philo[i], DEATH);
+		exit(0);
 		if (philo->env->num_of_meals >= 0
 			&& philo->env->counting_meals < 0)
 			write_message(&philo[i], FINAL_MEAL);
@@ -26,7 +28,7 @@ int	finishing(t_philo *philo, uint32_t i)
 		i = 0;
 		while (i < philo->env->num_of_philos)
 		{
-			kill(philo[i].pid, SIGKILL);
+			kill(philo[i].pid, SIGTERM);
 			usleep(1000);
 			i++;
 		}

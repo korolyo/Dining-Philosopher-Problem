@@ -36,13 +36,21 @@ int	threads(t_env *env)
 	env->start_time = get_time_ms();
 	while (i < env->num_of_philos)
 	{
-		if ((env->philosopher[i].pid = fork()) == 0)
+		env->philosopher[i].pid = fork();
+		if (env->philosopher[i].pid == -1)
+		{
+			printf(ERROR_MESSAGE);
+			exit(0);
+		}
+		if (env->philosopher[i].pid == 0)
+		{
+			pthread_create(&waiter, NULL, &monitor, (void *) env->philosopher);
 			philo_alive(&env->philosopher[i]);
+			pthread_join(waiter, NULL);
+			exit(0);
+		}
 		i++;
 	}
-	i = 0;
-	pthread_create(&waiter, NULL, &monitor, (void *)env->philosopher);
-	pthread_join(waiter, NULL);
 	return (0);
 }
 
@@ -52,15 +60,16 @@ int	main(int argc, char **argv)
 
 	if (!check_argv(argc, argv))
 	{
-		printf(ERROR_MESSAGE);
+		printf("Wrong args!\n");
 		return (0);
 	}
 	if (init_data(&env, argc, argv) == -1)
 	{
-		printf(ERROR_MESSAGE);
+		printf("Error in init\n");
 		return (0);
 	}
 	threads(&env);
+	sem_wait(env.death);
 	clean_all(&env);
 	return (0);
 }

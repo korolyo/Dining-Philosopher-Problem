@@ -24,14 +24,6 @@ void	finish_semaphors(t_env *env)
 
 void	finish_threads(t_env *env)
 {
-//	int64_t	i;
-//
-//	i = 0;
-//	while (i < env->num_of_philos)
-//	{
-//		kill(env->philosopher[i].pid, 0);
-//		i++;
-//	}
 	free(env->philosopher);
 }
 

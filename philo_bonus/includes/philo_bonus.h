@@ -27,11 +27,6 @@
 
 # define PHILO_MAX 200
 
-// PHILOS STATES
-# define HUNGRY		1
-# define EATING		2
-# define THINKING	3
-
 //STATES OF PHILOS
 
 # define FORK_LEFT	11
@@ -88,7 +83,6 @@ struct		s_env
 	int64_t		num_of_meals;
 	int64_t		counting_meals;
 	int64_t		start_time;
-//	pthread_t	philo[PHILO_MAX];
 	sem_t		*fork;
 	sem_t		*message;
 	sem_t		*death;

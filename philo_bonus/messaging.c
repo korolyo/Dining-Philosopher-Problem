@@ -31,9 +31,7 @@ char	*get_message(int message)
 
 void	write_message(t_philo *philo, int message)
 {
-	static int	done = 0;
-
-//	sem_wait(philo->env->message);
+	sem_wait(philo->env->message);
 	if (done == 0)
 	{
 		if (message == DEATH || message == FINAL_MEAL)
@@ -42,10 +40,11 @@ void	write_message(t_philo *philo, int message)
 		{
 			printf(FINAL_MEAL_MESSAGE " %lld times\n",
 				philo->env->num_of_meals);
+			sem_post(philo->env->death);
 			return ;
 		}
 		printf("%lld %lld%s\n", get_time_ms() - philo->env->start_time,
 			philo->id, get_message(message));
 	}
-//	sem_post(philo->env->message);
+	sem_post(philo->env->message);
 }
