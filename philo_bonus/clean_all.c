@@ -14,12 +14,14 @@
 
 void	finish_semaphors(t_env *env)
 {
-	sem_close(env->fork);
+	sem_close(env->forks);
 	sem_close(env->death);
 	sem_close(env->message);
-	sem_unlink(FORK_SEM);
+	sem_close(env->ending);
+	sem_unlink(FORKS_SEM);
 	sem_unlink(MESSAGE_SEM);
 	sem_unlink(DEATH_SEM);
+	sem_unlink(END_SEM);
 }
 
 void	finish_threads(t_env *env)

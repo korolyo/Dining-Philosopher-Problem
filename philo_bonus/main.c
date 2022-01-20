@@ -14,10 +14,11 @@
 
 void	*philo_alive(t_philo *philo)
 {
+	philo->env->start_time = get_time_ms();
 	philo->timestamp = philo->env->start_time;
 	if (philo->id % 2 == 1)
 		ft_usleep(10);
-	while (philo->is_dead == 0)
+	while (1)
 	{
 		take_forks(philo);
 		eat(philo);
@@ -33,7 +34,6 @@ int	threads(t_env *env)
 	int64_t		i;
 
 	i = 0;
-	env->start_time = get_time_ms();
 	while (i < env->num_of_philos)
 	{
 		env->philosopher[i].pid = fork();
@@ -69,7 +69,7 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	threads(&env);
-	sem_wait(env.death);
+	sem_wait(env.ending);
 	clean_all(&env);
 	return (0);
 }

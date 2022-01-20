@@ -48,14 +48,9 @@
 
 typedef struct s_env	t_env;
 typedef struct s_philo	t_philo;
-typedef struct s_waiter	t_waiter;
 typedef pthread_mutex_t	t_mutex;
 typedef struct timeval	t_time;
 
-struct		s_waiter
-{
-	int64_t	i;
-};
 
 struct		s_philo
 {

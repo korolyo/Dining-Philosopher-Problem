@@ -49,19 +49,14 @@
 # define FINAL_MEAL_MESSAGE	"Each philosopher ate at least"
 # define ERROR_MESSAGE		"\x1b[31m Error\n\x1b[0m"
 
-# define FORK_SEM			"Fork"
+# define FORKS_SEM			"Forks"
 # define MESSAGE_SEM			"Message"
 # define DEATH_SEM			"Death"
+# define END_SEM				"End"
 
 typedef struct s_env	t_env;
 typedef struct s_philo	t_philo;
-typedef struct s_waiter	t_waiter;
 typedef struct timeval	t_time;
-
-struct		s_waiter
-{
-	int64_t	i;
-};
 
 struct		s_philo
 {
@@ -69,7 +64,7 @@ struct		s_philo
 	int64_t	id;
 	int64_t	timestamp;
 	int64_t	num_of_philos;
-	int64_t	is_dead;
+//	int64_t	is_dead;
 	t_env	*env;
 };
 
@@ -83,9 +78,10 @@ struct		s_env
 	int64_t		num_of_meals;
 	int64_t		counting_meals;
 	int64_t		start_time;
-	sem_t		*fork;
+	sem_t		*forks;
 	sem_t		*message;
 	sem_t		*death;
+	sem_t		*ending;
 	t_philo		*philosopher;
 };
 

@@ -45,7 +45,7 @@ int	init_philo(t_env *env)
 		return (-1);
 	while (i < env->num_of_philos)
 	{
-		(philo + i)->is_dead = 0;
+//		(philo + i)->is_dead = 0;
 		(philo + i)->id = i + 1;
 		(philo + i)->timestamp = get_time_ms();
 		(philo + i)->env = env;
@@ -63,9 +63,11 @@ void	init_env(t_env *env, int argc, char **argv)
 	env->time_to_sleep = (uint32_t)ft_atol(argv[4]);
 	env->num_of_meals = -1;
 	env->counting_meals = 0;
-	env->fork = sem_open(FORK_SEM, O_CREAT, 0777, env->num_of_philos);
-	env->message = sem_open(MESSAGE_SEM, O_CREAT, 0777, 1);
-	env->death = sem_open(DEATH_SEM, O_CREAT, 0777, 0);
+	env->forks = sem_open(FORKS_SEM, O_CREAT, S_IRWXU | S_IRWXG,
+						  env->num_of_philos);
+	env->message = sem_open(MESSAGE_SEM, O_CREAT, S_IRWXU | S_IRWXG, 1);
+	env->death = sem_open(DEATH_SEM, O_CREAT, S_IRWXU | S_IRWXG, 1);
+	env->ending = sem_open(END_SEM, O_CREAT, S_IRWXU | S_IRWXG, 0);
 	if (argc > 5)
 	{
 		env->num_of_meals = ft_atol(argv[5]);

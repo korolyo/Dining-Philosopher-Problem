@@ -50,6 +50,7 @@ void	*monitor(void *args)
 		i = 0;
 		while (i < philo->env->num_of_philos)
 		{
+//			printf("test\n");
 			sem_wait(philo->env->death);
 			if (!finishing(philo, i))
 				return (NULL);
