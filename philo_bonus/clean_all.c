@@ -12,25 +12,15 @@
 
 #include "philo_bonus.h"
 
-void	finish_semaphors(t_env *env)
+void	finish_semaphores(t_env *env)
 {
 	sem_close(env->forks);
 	sem_close(env->death);
 	sem_close(env->message);
 	sem_close(env->ending);
-	sem_unlink(FORKS_SEM);
-	sem_unlink(MESSAGE_SEM);
-	sem_unlink(DEATH_SEM);
-	sem_unlink(END_SEM);
-}
-
-void	finish_threads(t_env *env)
-{
-	free(env->philosopher);
 }
 
 void	clean_all(t_env *env)
 {
-	finish_threads(env);
-	finish_semaphors(env);
+	finish_semaphores(env);
 }

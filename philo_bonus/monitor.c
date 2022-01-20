@@ -12,26 +12,19 @@
 
 #include "philo_bonus.h"
 
-int	finishing(t_philo *philo, uint32_t i)
+int	finishing(t_env *env, uint32_t i)
 {
-	if (get_time_ms() - philo->env->time_to_die > philo[i].timestamp
-		|| (philo->env->num_of_meals >= 0 && philo->env->counting_meals < 0))
+	if (get_time_ms() - env->time_to_die > env->timestamp
+		|| (env->num_of_meals >= 0 && env->counting_meals < 0))
 	{
-		sem_post(philo->env->death);
-		write_message(&philo[i], DEATH);
-		exit(0);
-		if (philo->env->num_of_meals >= 0
-			&& philo->env->counting_meals < 0)
-			write_message(&philo[i], FINAL_MEAL);
+		sem_post(env->death);
+		write_message(env, DEATH);
+		if (env->num_of_meals >= 0 && env->counting_meals < 0)
+			write_message(env, FINAL_MEAL);
 		else
-			write_message(&philo[i], DEATH);
+			write_message(env, DEATH);
 		i = 0;
-		while (i < philo->env->num_of_philos)
-		{
-			kill(philo[i].pid, SIGTERM);
-			usleep(1000);
-			i++;
-		}
+		exit(0);
 		return (0);
 	}
 	return (1);
@@ -39,22 +32,21 @@ int	finishing(t_philo *philo, uint32_t i)
 
 void	*monitor(void *args)
 {
-	t_philo		*philo;
+	t_env		*env;
 	uint32_t	i;
 
-	philo = (t_philo *)args;
+	env = (t_env *)args;
 	i = 0;
 	while (21)
 	{
 		usleep(100);
 		i = 0;
-		while (i < philo->env->num_of_philos)
+		while (i < env->num_of_philos)
 		{
-//			printf("test\n");
-			sem_wait(philo->env->death);
-			if (!finishing(philo, i))
+			sem_wait(env->death);
+			if (!finishing(env, i))
 				return (NULL);
-			sem_post(philo->env->death);
+			sem_post(env->death);
 			i++;
 		}
 	}

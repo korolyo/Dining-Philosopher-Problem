@@ -12,32 +12,31 @@
 
 #include "philo_bonus.h"
 
-void	take_forks(t_philo *philo)
+void	take_forks(t_env *env)
 {
-	sem_wait(philo->env->forks);
-	sem_wait(philo->env->forks);
-	printf("test\n");
-	write_message(philo, FORK_LEFT);
-	write_message(philo, FORK_RIGHT);
+	sem_wait(env->forks);
+	sem_wait(env->forks);
+	write_message(env, FORK_LEFT);
+	write_message(env, FORK_RIGHT);
 }
 
-void	eat(t_philo *philo)
+void	eat(t_env *env)
 {
-	philo->timestamp = get_time_ms();
-	write_message(philo, EAT);
-	ft_usleep(philo->env->time_to_eat);
-	philo->env->counting_meals--;
-	sem_post(philo->env->forks);
-	sem_post(philo->env->forks);
+	env->timestamp = get_time_ms();
+	write_message(env, EAT);
+	ft_usleep(env->time_to_eat);
+	env->counting_meals--;
+	sem_post(env->forks);
+	sem_post(env->forks);
 }
 
-void	philo_sleep(t_philo *philo)
+void	philo_sleep(t_env *env)
 {
-	write_message(philo, SLEEP);
-	ft_usleep(philo->env->time_to_sleep);
+	write_message(env, SLEEP);
+	ft_usleep(env->time_to_sleep);
 }
 
-void	think(t_philo *philo)
+void	think(t_env *env)
 {
-	write_message(philo, THINK);
+	write_message(env, THINK);
 }

@@ -12,18 +12,18 @@
 
 #include "philo_bonus.h"
 
-void	*philo_alive(t_philo *philo)
+void	*philo_alive(t_env *env)
 {
-	philo->env->start_time = get_time_ms();
-	philo->timestamp = philo->env->start_time;
-	if (philo->id % 2 == 1)
+	env->start_time = get_time_ms();
+	env->timestamp = env->start_time;
+	if (env->id % 2 == 1)
 		ft_usleep(10);
 	while (1)
 	{
-		take_forks(philo);
-		eat(philo);
-		philo_sleep(philo);
-		think(philo);
+		take_forks(env);
+		eat(env);
+		philo_sleep(env);
+		think(env);
 	}
 	return (NULL);
 }
@@ -36,18 +36,19 @@ int	threads(t_env *env)
 	i = 0;
 	while (i < env->num_of_philos)
 	{
-		env->philosopher[i].pid = fork();
-		if (env->philosopher[i].pid == -1)
+		env->pid = fork();
+		if (env->pid == -1)
 		{
 			printf(ERROR_MESSAGE);
 			exit(0);
 		}
-		if (env->philosopher[i].pid == 0)
+		if (env->pid == 0)
 		{
-			pthread_create(&waiter, NULL, &monitor, (void *) env->philosopher);
-			philo_alive(&env->philosopher[i]);
+			env->id = i + 1;
+			pthread_create(&waiter, NULL, &monitor, (void *) env);
+			philo_alive(env);
 			pthread_join(waiter, NULL);
-			exit(0);
+			break ;
 		}
 		i++;
 	}

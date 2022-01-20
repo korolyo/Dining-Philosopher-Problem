@@ -55,58 +55,48 @@
 # define END_SEM				"End"
 
 typedef struct s_env	t_env;
-typedef struct s_philo	t_philo;
 typedef struct timeval	t_time;
-
-struct		s_philo
-{
-	pid_t	pid;
-	int64_t	id;
-	int64_t	timestamp;
-	int64_t	num_of_philos;
-//	int64_t	is_dead;
-	t_env	*env;
-};
 
 // PARSED ARGS
 struct		s_env
 {
-	uint32_t	num_of_philos;
-	uint32_t	time_to_die;
-	uint32_t	time_to_eat;
-	uint32_t	time_to_sleep;
-	int64_t		num_of_meals;
-	int64_t		counting_meals;
-	int64_t		start_time;
-	sem_t		*forks;
-	sem_t		*message;
-	sem_t		*death;
-	sem_t		*ending;
-	t_philo		*philosopher;
+	unsigned int	num_of_philos;
+	unsigned int	time_to_die;
+	unsigned int	time_to_eat;
+	unsigned int	time_to_sleep;
+	int64_t			num_of_meals;
+	int64_t			counting_meals;
+	int64_t			start_time;
+	sem_t			*forks;
+	sem_t			*message;
+	sem_t			*death;
+	sem_t			*ending;
+	pid_t			pid;
+	int64_t			id;
+	int64_t			timestamp;
 };
 
 int		check_argv(int argc, char **argv);
 int		init_data(t_env *env, int argc, char **argv);
 void	init_env(t_env *env, int argc, char **argv);
-int		init_philo(t_env *env);
 int		init_forks(t_env *env);
 int64_t	get_time_ms(void);
-void	write_message(t_philo *philo, int message);
+void	write_message(t_env *env, int message);
 char	*get_message(int message);
 void	*monitor(void *args);
-int		finishing(t_philo *philo, uint32_t i);
+int		finishing(t_env *env, uint32_t i);
 void	ft_usleep(int ms);
 int		threads(t_env *env);
-void	*philo_alive(t_philo *philo);
+void	*philo_alive(t_env *env);
 void	clean_all(t_env *env);
 void	finish_semaphors(t_env *env);
 void	finish_threads(t_env *env);
 
 // ACTIONS
-void	take_forks(t_philo *philo);
-void	eat(t_philo *philo);
-void	philo_sleep(t_philo *philo);
-void	think(t_philo *philo);
+void	take_forks(t_env *env);
+void	eat(t_env *env);
+void	philo_sleep(t_env *env);
+void	think(t_env *env);
 
 // SOME UTILS
 int64_t	ft_atol(const char *nptr);
