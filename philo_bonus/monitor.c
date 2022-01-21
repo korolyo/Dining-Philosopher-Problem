@@ -15,15 +15,19 @@
 int	finishing(t_env *env, uint32_t i)
 {
 	if (get_time_ms() - env->time_to_die > env->timestamp
-		|| (env->num_of_meals >= 0 && env->counting_meals < 0))
+		|| (env->num_of_meals >= 0 && env->counting_meals <= 0))
 	{
 		sem_post(env->death);
-		write_message(env, DEATH);
-		if (env->num_of_meals >= 0 && env->counting_meals < 0)
+		if (env->num_of_meals >= 0 && env->counting_meals <= 0)
 			write_message(env, FINAL_MEAL);
 		else
 			write_message(env, DEATH);
 		i = 0;
+		while (i < env->num_of_philos)
+		{
+			kill(env->pid[i], SIGTERM);
+			i++;
+		}
 		exit(0);
 		return (0);
 	}

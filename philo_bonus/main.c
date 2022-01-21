@@ -36,13 +36,13 @@ int	threads(t_env *env)
 	i = 0;
 	while (i < env->num_of_philos)
 	{
-		env->pid = fork();
-		if (env->pid == -1)
+		env->pid[i] = fork();
+		if (env->pid[i] == -1)
 		{
 			printf(ERROR_MESSAGE);
 			exit(0);
 		}
-		if (env->pid == 0)
+		if (env->pid[i] == 0)
 		{
 			env->id = i + 1;
 			pthread_create(&waiter, NULL, &monitor, (void *) env);

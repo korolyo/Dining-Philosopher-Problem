@@ -39,7 +39,7 @@ void	write_message(t_env *env, int message)
 	{
 		if (message == FINAL_MEAL)
 			printf(FINAL_MEAL_MESSAGE " %lld times\n", env->num_of_meals);
-		sem_post(env->death);
+		sem_post(env->ending);
 		exit(5);
 	}
 	sem_post(env->message);

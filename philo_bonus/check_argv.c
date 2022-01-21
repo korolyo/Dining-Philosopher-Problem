@@ -36,16 +36,17 @@ int	check_argv(int argc, char **argv)
 
 void	init_env(t_env *env, int argc, char **argv)
 {
-	env->id = 0;
-	env->timestamp = get_time_ms();
 	env->num_of_philos = (unsigned int)ft_atol(argv[1]);
 	env->time_to_die = (unsigned int)ft_atol(argv[2]);
 	env->time_to_eat = (unsigned int)ft_atol(argv[3]);
 	env->time_to_sleep = (unsigned int)ft_atol(argv[4]);
 	env->num_of_meals = -1;
 	env->counting_meals = 0;
+	env->id = 0;
+	env->timestamp = get_time_ms();
+	env->pid = (pid_t *)malloc(sizeof(pid_t) * env->num_of_philos);
 	env->forks = sem_open(FORKS_SEM, O_CREAT, S_IRWXU | S_IRWXG,
-		env->num_of_philos);
+			env->num_of_philos);
 	env->message = sem_open(MESSAGE_SEM, O_CREAT, S_IRWXU | S_IRWXG, 1);
 	env->death = sem_open(DEATH_SEM, O_CREAT, S_IRWXU | S_IRWXG, 1);
 	env->ending = sem_open(END_SEM, O_CREAT, S_IRWXU | S_IRWXG, 0);
@@ -56,7 +57,7 @@ void	init_env(t_env *env, int argc, char **argv)
 	if (argc > 5)
 	{
 		env->num_of_meals = ft_atol(argv[5]);
-		env->counting_meals = env->num_of_meals * env->num_of_philos;
+		env->counting_meals = env->num_of_meals;
 	}
 }
 

@@ -51,7 +51,6 @@ typedef struct s_philo	t_philo;
 typedef pthread_mutex_t	t_mutex;
 typedef struct timeval	t_time;
 
-
 struct		s_philo
 {
 	int64_t	id;

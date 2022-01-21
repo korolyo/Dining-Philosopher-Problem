@@ -71,7 +71,7 @@ struct		s_env
 	sem_t			*message;
 	sem_t			*death;
 	sem_t			*ending;
-	pid_t			pid;
+	pid_t			*pid;
 	int64_t			id;
 	int64_t			timestamp;
 };

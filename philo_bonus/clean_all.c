@@ -22,5 +22,6 @@ void	finish_semaphores(t_env *env)
 
 void	clean_all(t_env *env)
 {
+	free(env->pid);
 	finish_semaphores(env);
 }
