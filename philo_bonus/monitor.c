@@ -15,10 +15,10 @@
 int	finishing(t_env *env, uint32_t i)
 {
 	if (get_time_ms() - env->time_to_die > env->timestamp
-		|| (env->num_of_meals >= 0 && env->counting_meals <= 0))
+		|| (env->num_of_meals >= 0 && env->counting_meals <= -1))
 	{
 		sem_post(env->death);
-		if (env->num_of_meals >= 0 && env->counting_meals <= 0)
+		if (env->num_of_meals >= 0 && env->counting_meals <= -1)
 			write_message(env, FINAL_MEAL);
 		else
 			write_message(env, DEATH);
