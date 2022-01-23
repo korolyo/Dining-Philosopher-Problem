@@ -12,7 +12,7 @@
 
 #include "philo_bonus.h"
 
-int	finishing(t_env *env, uint32_t i)
+int	finishing(t_env *env)
 {
 	if (get_time_ms() - env->time_to_die > env->timestamp
 		|| (env->num_of_meals >= 0 && env->counting_meals <= -1))
@@ -22,14 +22,8 @@ int	finishing(t_env *env, uint32_t i)
 			write_message(env, FINAL_MEAL);
 		else
 			write_message(env, DEATH);
-		i = 0;
-		while (i < env->num_of_philos)
-		{
-			kill(env->pid[i], SIGTERM);
-			i++;
-		}
+		env->is_dead = 1;
 		exit(0);
-		return (0);
 	}
 	return (1);
 }
@@ -48,7 +42,7 @@ void	*monitor(void *args)
 		while (i < env->num_of_philos)
 		{
 			sem_wait(env->death);
-			if (!finishing(env, i))
+			if (!finishing(env))
 				return (NULL);
 			sem_post(env->death);
 			i++;
