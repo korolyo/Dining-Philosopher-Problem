@@ -19,6 +19,7 @@
 # include <string.h>
 # include <pthread.h>
 # include <semaphore.h>
+# include <sys/types.h>
 # include <sys/time.h>
 # include <sys/wait.h>
 # include <limits.h>
@@ -70,8 +71,8 @@ struct		s_env
 	sem_t			*forks;
 	sem_t			*message;
 	sem_t			*death;
-	sem_t			*ending;
 	pid_t			*pid;
+	int				is_dead;
 	int64_t			id;
 	int64_t			timestamp;
 };
@@ -84,13 +85,13 @@ int64_t	get_time_ms(void);
 void	write_message(t_env *env, int message);
 char	*get_message(int message);
 void	*monitor(void *args);
-int		finishing(t_env *env);
 void	ft_usleep(int ms);
 int		threads(t_env *env);
 void	*philo_alive(t_env *env);
 void	clean_all(t_env *env);
 void	finish_semaphors(t_env *env);
 void	finish_threads(t_env *env);
+void	end_philos(t_env *env);
 
 // ACTIONS
 void	take_forks(t_env *env);

@@ -46,15 +46,13 @@ void	init_env(t_env *env, int argc, char **argv)
 	env->timestamp = get_time_ms();
 	env->is_dead = 0;
 	env->pid = (pid_t *)malloc(sizeof(pid_t) * env->num_of_philos);
+	sem_unlink(FORKS_SEM);
+	sem_unlink(MESSAGE_SEM);
+	sem_unlink(DEATH_SEM);
 	env->forks = sem_open(FORKS_SEM, O_CREAT, S_IRWXU | S_IRWXG,
 			env->num_of_philos);
 	env->message = sem_open(MESSAGE_SEM, O_CREAT, S_IRWXU | S_IRWXG, 1);
 	env->death = sem_open(DEATH_SEM, O_CREAT, S_IRWXU | S_IRWXG, 1);
-	env->ending = sem_open(END_SEM, O_CREAT, S_IRWXU | S_IRWXG, 0);
-	sem_unlink(FORKS_SEM);
-	sem_unlink(MESSAGE_SEM);
-	sem_unlink(DEATH_SEM);
-	sem_unlink(END_SEM);
 	if (argc > 5)
 	{
 		env->num_of_meals = ft_atol(argv[5]);
