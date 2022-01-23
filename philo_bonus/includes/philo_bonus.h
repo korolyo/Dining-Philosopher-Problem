@@ -84,7 +84,7 @@ int64_t	get_time_ms(void);
 void	write_message(t_env *env, int message);
 char	*get_message(int message);
 void	*monitor(void *args);
-int		finishing(t_env *env, uint32_t i);
+int		finishing(t_env *env);
 void	ft_usleep(int ms);
 int		threads(t_env *env);
 void	*philo_alive(t_env *env);

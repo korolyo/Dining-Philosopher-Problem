@@ -44,6 +44,7 @@ void	init_env(t_env *env, int argc, char **argv)
 	env->counting_meals = 0;
 	env->id = 0;
 	env->timestamp = get_time_ms();
+	env->is_dead = 0;
 	env->pid = (pid_t *)malloc(sizeof(pid_t) * env->num_of_philos);
 	env->forks = sem_open(FORKS_SEM, O_CREAT, S_IRWXU | S_IRWXG,
 			env->num_of_philos);
